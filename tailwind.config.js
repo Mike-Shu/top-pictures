@@ -12,6 +12,21 @@ module.exports = {
             fontFamily: {
                 sans: ['Nunito', ...defaultTheme.fontFamily.sans],
             },
+            keyframes: {
+                'fade-in-down': {
+                    '0%': {
+                        opacity: '0',
+                        transform: 'translateY(-10px)'
+                    },
+                    '100%': {
+                        opacity: '1',
+                        transform: 'none'
+                    },
+                }
+            },
+            animation: {
+                'fade-in-down': 'fade-in-down 0.5s cubic-bezier(0.42,0,0.58,1) 1'
+            },
         },
     },
 
