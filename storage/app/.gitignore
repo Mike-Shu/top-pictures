@@ -1,3 +1,5 @@
 *
 !public/
+!chunks/
+!photos/
 !.gitignore
