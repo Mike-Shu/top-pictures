@@ -4,7 +4,6 @@ namespace Tests\Feature\Http\Controllers\Web;
 
 use App\Models\User;
 use App\Services\Uploader\UploaderService;
-use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Storage;
@@ -13,8 +12,6 @@ use Tests\TestCase;
 
 class UploaderTest extends TestCase
 {
-
-    use WithFaker;
 
     private $storageDisk;
     private $storagePath;
@@ -25,7 +22,6 @@ class UploaderTest extends TestCase
 
     public function setUp(): void
     {
-
         parent::setUp();
 
         // Куда будем загружать файл.
@@ -51,7 +47,6 @@ class UploaderTest extends TestCase
      */
     public function testAuthenticationRequired()
     {
-
         $response = $this
             ->get(
                 route('upload_form')
@@ -59,7 +54,6 @@ class UploaderTest extends TestCase
 
         $this->assertGuest();
         $response->assertRedirect(route('login'));
-
     }
 
     /**
@@ -67,7 +61,6 @@ class UploaderTest extends TestCase
      */
     public function testUploadScreenCanBeRendered(): void
     {
-
         $response = $this
             ->actingAs($this->user)
             ->get(
@@ -82,7 +75,6 @@ class UploaderTest extends TestCase
          * @see UploaderTest::testDuplicateFileException()
          */
         Artisan::call('migrate:fresh');
-
     }
 
     /**
@@ -90,7 +82,6 @@ class UploaderTest extends TestCase
      */
     public function testFileCanBeUploaded(): void
     {
-
         Storage::fake($this->storageDisk);
 
         $response = $this
@@ -115,7 +106,6 @@ class UploaderTest extends TestCase
         Storage::disk($this->storageDisk)
             ->assertExists($filePath)
             ->delete($filePath); // Не забудем удалить временный файл.
-
     }
 
     /**
@@ -123,7 +113,6 @@ class UploaderTest extends TestCase
      */
     public function testChunkCanBeUploaded(): void
     {
-
         Storage::fake($this->chunkStorageDisk);
 
         $postData = [
@@ -158,7 +147,6 @@ class UploaderTest extends TestCase
         Storage::disk($this->chunkStorageDisk)
             ->assertExists($filePath)
             ->delete($filePath); // Не забудем удалить временный файл.
-
     }
 
     /**
@@ -168,7 +156,6 @@ class UploaderTest extends TestCase
      */
     public function testMissingFileException(): void
     {
-
         $response = $this
             ->actingAs($this->user)
             ->post(
@@ -184,7 +171,6 @@ class UploaderTest extends TestCase
                 'status' => UploaderService::STATUS_FAILED,
                 'error'  => 400,
             ]);
-
     }
 
     /**
@@ -192,7 +178,6 @@ class UploaderTest extends TestCase
      */
     public function testDuplicateFileException(): void
     {
-
         $response = $this
             ->actingAs($this->user)
             ->post(
@@ -208,7 +193,6 @@ class UploaderTest extends TestCase
                 'status' => UploaderService::STATUS_FAILED,
                 'error'  => 409,
             ]);
-
     }
 
     /**
@@ -216,7 +200,6 @@ class UploaderTest extends TestCase
      */
     public function testFileTypeException(): void
     {
-
         $file = UploadedFile::fake()
             ->image('image.png')
             ->mimeType('image/png');
@@ -238,7 +221,6 @@ class UploaderTest extends TestCase
             ]);
 
         Artisan::call('migrate:fresh');
-
     }
 
 }

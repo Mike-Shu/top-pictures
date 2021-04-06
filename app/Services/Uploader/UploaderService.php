@@ -12,6 +12,7 @@ use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Log;
 use Pion\Laravel\ChunkUpload\Exceptions\UploadFailedException;
 use Pion\Laravel\ChunkUpload\Handler\HandlerFactory;
@@ -110,8 +111,11 @@ class UploaderService
                 static::ERR_CODE_DUPLICATE_FILE,
             ];
 
-            if (!in_array($eCode, $ignoredExceptions)) {
-                Log::critical(__METHOD__.': '.$eMessage);
+            if (
+                App::environment('testing') === false &&
+                in_array($eCode, $ignoredExceptions) === false
+            ) {
+                Log::critical(__METHOD__.': '.$eMessage); // @codeCoverageIgnore
             }
 
             return response()->json([
