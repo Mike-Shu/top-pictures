@@ -15,7 +15,7 @@ return [
      */
 
     'enabled' => env('DEBUGBAR_ENABLED', null),
-    'except' => [
+    'except'  => [
         'telescope*',
         'horizon*',
         'fetch*',
@@ -36,7 +36,7 @@ return [
     'storage' => [
         'enabled'    => true,
         'driver'     => 'file', // redis, file, pdo, socket, custom
-        'path'       => storage_path('debugbar'), // For file driver
+        'path'       => env('DEBUGBAR_CUSTOM_STORAGE_PATH', storage_path('debugbar')), // For file driver
         'connection' => null,   // Leave null for default connection (Redis/PDO)
         'provider'   => '', // Instance of StorageInterface for custom driver
         'hostname'   => '127.0.0.1', // Hostname to use with the "socket" driver
@@ -70,7 +70,7 @@ return [
      | Optionally, you can also send ServerTiming headers on ajax requests for the Chrome DevTools.
      */
 
-    'capture_ajax' => true,
+    'capture_ajax'    => true,
     'add_ajax_timing' => false,
 
     /*
@@ -82,7 +82,7 @@ return [
      | in the Messages tab.
      |
      */
-    'error_handler' => false,
+    'error_handler'   => false,
 
     /*
      |--------------------------------------------------------------------------
@@ -93,7 +93,7 @@ return [
      | Extension, without the server-side code. It uses Debugbar collectors instead.
      |
      */
-    'clockwork' => false,
+    'clockwork'       => false,
 
     /*
      |--------------------------------------------------------------------------
@@ -140,22 +140,22 @@ return [
      */
 
     'options' => [
-        'auth' => [
+        'auth'  => [
             'show_name' => true,   // Also show the users name/email in the debugbar
         ],
-        'db' => [
-            'with_params'       => true,   // Render SQL with the parameters substituted
-            'backtrace'         => true,   // Use a backtrace to find the origin of the query in your files.
+        'db'    => [
+            'with_params'             => true,   // Render SQL with the parameters substituted
+            'backtrace'               => true,   // Use a backtrace to find the origin of the query in your files.
             'backtrace_exclude_paths' => [],   // Paths to exclude from backtrace. (in addition to defaults)
-            'timeline'          => false,  // Add the queries to the timeline
-            'explain' => [                 // Show EXPLAIN output on queries
+            'timeline'                => false,  // Add the queries to the timeline
+            'explain'                 => [                 // Show EXPLAIN output on queries
                 'enabled' => false,
-                'types' => ['SELECT'],     // Deprecated setting, is always only SELECT
+                'types'   => ['SELECT'],     // Deprecated setting, is always only SELECT
             ],
-            'hints'             => false,    // Show hints for common mistakes
-            'show_copy'         => false,    // Show copy button next to the query
+            'hints'                   => false,    // Show hints for common mistakes
+            'show_copy'               => false,    // Show copy button next to the query
         ],
-        'mail' => [
+        'mail'  => [
             'full_log' => false,
         ],
         'views' => [
@@ -164,7 +164,7 @@ return [
         'route' => [
             'label' => true,  // show complete route on bar
         ],
-        'logs' => [
+        'logs'  => [
             'file' => null,
         ],
         'cache' => [
@@ -183,7 +183,7 @@ return [
      |
      */
 
-    'inject' => false,
+    'inject'       => env('DEBUGBAR_CUSTOM_INJECT', true),
 
     /*
      |--------------------------------------------------------------------------
@@ -215,5 +215,5 @@ return [
      | Switches between light and dark theme. If set to auto it will respect system preferences
      | Possible values: auto, light, dark
      */
-    'theme' => 'auto',
+    'theme'        => 'auto',
 ];
