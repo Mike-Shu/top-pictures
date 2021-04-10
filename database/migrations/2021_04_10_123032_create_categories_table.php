@@ -11,7 +11,7 @@ class CreateCategoriesTable extends Migration
      * @var string
      */
     private $table = "categories";
-    private $comment = '';
+    private $comment = 'Хранилище категорий';
 
     /**
      * @return void
@@ -38,10 +38,7 @@ class CreateCategoriesTable extends Migration
 
         });
 
-        $prefix = config('database.connections.mysql.prefix');
-        $tableName = $prefix . $this->table;
-
-        \Illuminate\Support\Facades\DB::statement("ALTER TABLE `{$tableName}` comment 'Хранилище фотографий'");
+        set_table_comment($this->table, $this->comment);
     }
 
     /**
