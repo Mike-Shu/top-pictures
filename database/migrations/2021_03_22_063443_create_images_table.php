@@ -23,6 +23,7 @@ class CreateImagesTable extends Migration
             $table->id();
 
             $table->foreignId('category_id')
+                ->default(0)
                 ->index()
                 ->comment('В какой категории');
 
