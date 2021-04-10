@@ -14,25 +14,28 @@ use Illuminate\Support\Carbon;
 /**
  * App\Models\Image
  *
- * @property int         $id
- * @property int         $user_id   Владелец файла
- * @property string      $name      Исходный файл
- * @property string      $extension Расширение файла
- * @property int         $size      Размер файла
- * @property int         $pending   Ожидает обработки
- * @property string|null $description
- * @property int         $width     Ширина изображения
- * @property int         $height    Высота изображения
- * @property int         $visible   Видимость на сайте
- * @property Carbon|null $created_at
- * @property Carbon|null $updated_at
- * @property Carbon|null $deleted_at
- * @property-read User   $user
- * @method static ImageFactory factory(...$parameters)
+ * @property int                   $id
+ * @property int                   $category_id В какой категории
+ * @property int                   $user_id     Владелец файла
+ * @property string                $name        Исходный файл
+ * @property string                $extension   Расширение файла
+ * @property int                   $size        Размер файла
+ * @property bool                  $pending     Ожидает обработки
+ * @property string|null           $description
+ * @property int                   $width       Ширина изображения
+ * @property int                   $height      Высота изображения
+ * @property bool                  $visible     Видимость на сайте
+ * @property Carbon|null           $created_at
+ * @property Carbon|null           $updated_at
+ * @property Carbon|null           $deleted_at
+ * @property-read \App\Models\User $user
+ * @method static \Database\Factories\ImageFactory factory(...$parameters)
  * @method static Builder|Image newModelQuery()
  * @method static Builder|Image newQuery()
  * @method static Builder|Image notUnique(string $fileName)
+ * @method static \Illuminate\Database\Query\Builder|Image onlyTrashed()
  * @method static Builder|Image query()
+ * @method static Builder|Image whereCategoryId($value)
  * @method static Builder|Image whereCreatedAt($value)
  * @method static Builder|Image whereDeletedAt($value)
  * @method static Builder|Image whereDescription($value)
@@ -46,7 +49,6 @@ use Illuminate\Support\Carbon;
  * @method static Builder|Image whereUserId($value)
  * @method static Builder|Image whereVisible($value)
  * @method static Builder|Image whereWidth($value)
- * @method static \Illuminate\Database\Query\Builder|Image onlyTrashed()
  * @method static \Illuminate\Database\Query\Builder|Image withTrashed()
  * @method static \Illuminate\Database\Query\Builder|Image withoutTrashed()
  * @mixin Eloquent
@@ -56,6 +58,7 @@ class Image extends Model
     use HasFactory, SoftDeletes;
 
     protected $fillable = [
+        'category_id',
         'user_id',
         'name',
         'extension',
@@ -71,11 +74,20 @@ class Image extends Model
         'visible' => 'boolean',
     ];
 
+    /**
+     * @return BelongsTo
+     */
+    public function category(): BelongsTo
+    {
+        return $this->belongsTo(Category::class);
+    }
+
+    /**
+     * @return BelongsTo
+     */
     public function user(): BelongsTo
     {
-
         return $this->belongsTo(User::class);
-
     }
 
     /**

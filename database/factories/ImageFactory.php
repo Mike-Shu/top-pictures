@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\Category;
 use App\Models\Image;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
@@ -24,6 +25,9 @@ class ImageFactory extends Factory
             'visible'     => $this->faker->boolean,
             'created_at'  => Carbon::now(),
             'updated_at'  => Carbon::now(),
+            'category_id' => function () {
+                return Category::factory()->create()->id;
+            },
             'user_id'     => function () {
                 return User::factory()->create()->id;
             },

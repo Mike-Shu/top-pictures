@@ -11,16 +11,20 @@ class CreateImagesTable extends Migration
      * @var string
      */
     private $table = "images";
+    private $comment = 'Хранилище фотографий';
 
     /**
      * @return void
      */
     public function up()
     {
-
         Schema::create($this->table, function (Blueprint $table) {
 
             $table->id();
+
+            $table->foreignId('category_id')
+                ->index()
+                ->comment('В какой категории');
 
             $table->foreignId('user_id')
                 ->index()
@@ -66,7 +70,6 @@ class CreateImagesTable extends Migration
         $tableName = $prefix . $this->table;
 
         \Illuminate\Support\Facades\DB::statement("ALTER TABLE `{$tableName}` comment 'Хранилище фотографий'");
-
     }
 
     /**
