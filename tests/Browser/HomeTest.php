@@ -24,27 +24,23 @@ class HomeTest extends DuskTestCase
     /**
      * @throws Throwable
      */
-    public function testHomePageGuestRenderedCorrectly()
+    public function test_homepage_rendered_correctly()
     {
-        $this->browse(function (Browser $browser) {
+        $message = __('Home page');
+
+        $this->browse(function (Browser $browser) use ($message) {
             $browser->assertGuest()
                 ->visit($this->homeUrl)
                 ->assertPathIs($this->homeUrl)
-                ->assertSee('Home page');
+                ->assertSee($message);
         });
-    }
 
-    /**
-     * @throws Throwable
-     */
-    public function testHomePageAuthRenderedCorrectly()
-    {
-        $this->browse(function (Browser $browser) {
+        $this->browse(function (Browser $browser) use ($message) {
             $browser->loginAs($this->user)
                 ->assertAuthenticatedAs($this->user)
                 ->visit($this->homeUrl)
                 ->assertPathIs($this->homeUrl)
-                ->assertSee('Home page');
+                ->assertSee($message);
         });
     }
 }

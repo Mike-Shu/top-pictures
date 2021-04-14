@@ -28,7 +28,7 @@ class UploadTest extends DuskTestCase
      *
      * @throws Throwable
      */
-    public function testUploadPageAuthenticationRequired()
+    public function test_upload_page_authentication_required()
     {
         $this->browse(function (Browser $browser) {
             $browser->assertGuest()
@@ -43,7 +43,7 @@ class UploadTest extends DuskTestCase
      *
      * @throws Throwable
      */
-    public function testUploadPageRenderedCorrectly()
+    public function test_upload_page_rendered_correctly()
     {
         $this->browse(function (Browser $browser) {
             $browser->assertGuest()
@@ -51,8 +51,14 @@ class UploadTest extends DuskTestCase
                 ->assertAuthenticatedAs($this->user)
                 ->visit($this->uploadUrl)
                 ->assertPathIs($this->uploadUrl)
-                ->assertSee('Upload a photo')
-                ->assertSee('Drop image files here to upload or select from your computer.');
+                ->assertSee(
+                    __('Upload a photo')
+                )
+                ->assertSee(
+                    __('Drop image files here to upload or :link.', [
+                        'link' => __('select from your computer')
+                    ])
+                );
         });
     }
 }

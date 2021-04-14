@@ -28,7 +28,7 @@ class DashboardTest extends DuskTestCase
      *
      * @throws Throwable
      */
-    public function testDashboardPageAuthenticationRequired()
+    public function test_dashboard_page_authentication_required()
     {
         $this->browse(function (Browser $browser) {
             $browser->assertGuest()
@@ -43,14 +43,16 @@ class DashboardTest extends DuskTestCase
      *
      * @throws Throwable
      */
-    public function testDashboardPageRenderedCorrectly()
+    public function test_dashboard_page_rendered_correctly()
     {
         $this->browse(function (Browser $browser) {
             $browser->assertGuest()
                 ->loginAs($this->user)
                 ->assertAuthenticatedAs($this->user)
                 ->visit($this->dashboardUrl)
-                ->assertSee('Dashboard page');
+                ->assertSee(
+                    __('Dashboard page')
+                );
         });
     }
 }

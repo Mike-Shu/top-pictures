@@ -8,30 +8,41 @@ use Tests\TestCase;
 
 class DashboardTest extends TestCase
 {
-
     use RefreshDatabase;
 
+    /**
+     * @var User
+     */
     private $user;
+
+    private $dashboardUrl;
+    private $loginUrl;
 
     protected function setUp(): void
     {
-
         parent::setUp();
 
         $this->user = User::factory()->create();
 
+        // Куда будем заходить.
+        $this->dashboardUrl = route('dashboard');
+        $this->loginUrl = route('login');
     }
 
-    public function testDashboardPageCanBeRendered(): void
+    /**
+     * Страница "админка" должна быть доступна только для пользователя,
+     * гость должен быть отправлен на авторизацию.
+     */
+    public function test_dashboard_screen_can_be_rendered()
     {
+        // Для гостя.
+        $this->assertGuest()
+            ->get($this->dashboardUrl)
+            ->assertRedirect($this->loginUrl);
 
-        $response = $this
-            ->actingAs($this->user)
-            ->get(
-                route('dashboard')
-            );
-
-        $response->assertOk();
-
+        // Для пользователя.
+        $this->actingAs($this->user)
+            ->get($this->dashboardUrl)
+            ->assertOk();
     }
 }

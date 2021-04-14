@@ -51,9 +51,15 @@ class CategoriesCreate extends DuskTestCase
                 ->assertAuthenticatedAs($this->user)
                 ->visit($this->createUrl)
                 ->assertPathIs($this->createUrl)
-                ->assertSee('Add category')
-                ->assertSee('Category name')
-                ->assertSee('Category description');
+                ->assertSee(
+                    __('Add category')
+                )
+                ->assertSee(
+                    __('Category name')
+                )
+                ->assertSee(
+                    __('Category description')
+                );
         });
     }
 }

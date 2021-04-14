@@ -7,6 +7,8 @@ use PHPUnit\Framework\TestCase;
 class HelpersTest extends TestCase
 {
     /**
+     * Тестируем функцию "empty_one_of()".
+     *
      * @return void
      */
     public function test_empty_one_of()
@@ -33,6 +35,8 @@ class HelpersTest extends TestCase
     }
 
     /**
+     * Тестируем функцию "empty_all_of()".
+     *
      * @return void
      */
     public function test_empty_all_of()
@@ -59,6 +63,8 @@ class HelpersTest extends TestCase
     }
 
     /**
+     * Тестируем функцию "not_empty()".
+     *
      * @return void
      */
     public function test_not_empty()

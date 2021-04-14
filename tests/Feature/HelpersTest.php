@@ -12,6 +12,8 @@ class HelpersTest extends TestCase
     use RefreshDatabase;
 
     /**
+     * Тестируем функцию "set_table_comment()".
+     *
      * @return void
      */
     public function test_set_table_comment()

@@ -4,6 +4,7 @@ namespace Tests\Feature\Http\Controllers\Web;
 
 use App\Models\User;
 use App\Services\Uploader\UploaderService;
+use Illuminate\Http\Testing\File;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Storage;
@@ -12,12 +13,19 @@ use Tests\TestCase;
 
 class UploaderTest extends TestCase
 {
-
     private $storageDisk;
     private $storagePath;
     private $chunkStorageDisk;
     private $chunkStoragePath;
+
+    /**
+     * @var User
+     */
     private $user;
+
+    /**
+     * @var File
+     */
     private $file;
 
     public function setUp(): void
@@ -52,7 +60,9 @@ class UploaderTest extends TestCase
             );
 
         $this->assertGuest();
-        $response->assertRedirect(route('login'));
+        $response->assertRedirect(
+            route('login')
+        );
     }
 
     /**

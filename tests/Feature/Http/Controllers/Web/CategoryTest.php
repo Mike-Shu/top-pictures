@@ -7,7 +7,6 @@ use App\Models\Category;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Support\Carbon;
 use Illuminate\Support\Str;
 use Tests\Feature\Http\Controllers\ControllersTestTools;
 use Tests\TestCase;
@@ -24,7 +23,7 @@ class CategoryTest extends TestCase
     /**
      * @var Category
      */
-    private $categoryMake; // TODO: проверить и запушить!
+    private $categoryMake;
 
     private $homeUrl;
     private $loginUrl;
@@ -110,13 +109,8 @@ class CategoryTest extends TestCase
 
         $this->assertDatabaseCount('categories', 1)
             ->assertDatabaseHas('categories', [
-                'id'          => 1,
                 'name'        => $name,
                 'description' => $desc,
-                'amount'      => 0,
-                'colors'      => null,
-                'created_at'  => (Carbon::now())->toDateTimeString(),
-                'deleted_at'  => null,
             ]);
     }
 
@@ -138,13 +132,8 @@ class CategoryTest extends TestCase
 
         $this->assertDatabaseCount('categories', 1)
             ->assertDatabaseHas('categories', [
-                'id'          => 1,
                 'name'        => $name,
                 'description' => null,
-                'amount'      => 0,
-                'colors'      => null,
-                'created_at'  => (Carbon::now())->toDateTimeString(),
-                'deleted_at'  => null,
             ]);
     }
 
@@ -343,12 +332,8 @@ class CategoryTest extends TestCase
 
         $this->assertDatabaseCount('categories', 1)
             ->assertDatabaseHas('categories', [
-                'id'          => $category->id,
                 'name'        => $category->name,
                 'description' => $category->description,
-                'amount'      => $category->amount,
-                'created_at'  => $category->created_at->toDateTimeString(),
-                'deleted_at'  => null,
             ]);
 
         $newName = $this->faker->text(
@@ -368,12 +353,8 @@ class CategoryTest extends TestCase
 
         $this->assertDatabaseCount('categories', 1)
             ->assertDatabaseHas('categories', [
-                'id'          => $category->id,
                 'name'        => $newName,
                 'description' => $newDesc,
-                'amount'      => $category->amount,
-                'created_at'  => $category->created_at->toDateTimeString(),
-                'deleted_at'  => null,
             ]);
     }
 
@@ -393,12 +374,8 @@ class CategoryTest extends TestCase
 
         $this->assertDatabaseCount('categories', 1)
             ->assertDatabaseHas('categories', [
-                'id'          => $category->id,
                 'name'        => $category->name,
                 'description' => $category->description,
-                'amount'      => $category->amount,
-                'created_at'  => $category->created_at->toDateTimeString(),
-                'deleted_at'  => null,
             ]);
 
         $newName = $this->faker->text(
@@ -414,12 +391,8 @@ class CategoryTest extends TestCase
 
         $this->assertDatabaseCount('categories', 1)
             ->assertDatabaseHas('categories', [
-                'id'          => $category->id,
                 'name'        => $newName,
                 'description' => null,
-                'amount'      => $category->amount,
-                'created_at'  => $category->created_at->toDateTimeString(),
-                'deleted_at'  => null,
             ]);
     }
 
@@ -560,19 +533,12 @@ class CategoryTest extends TestCase
     {
         Category::truncate();
 
-        /**
-         * @var $category Category
-         */
-        $category = Category::factory()
+        Category::factory()
             ->notEmpty()
             ->create();
 
         $this->assertDatabaseCount('categories', 1)
             ->assertDatabaseHas('categories', [
-                'id'         => $category->id,
-                'name'       => $category->name,
-                'amount'     => $category->amount,
-                'created_at' => $category->created_at->toDateTimeString(),
                 'deleted_at' => null,
             ]);
 
@@ -580,14 +546,15 @@ class CategoryTest extends TestCase
             ->delete($this->destroyUrl)
             ->assertRedirect($this->indexUrl);
 
-        $this->assertDatabaseCount('categories', 1)
-            ->assertDatabaseHas('categories', [
-                'id'         => $category->id,
-                'name'       => $category->name,
-                'amount'     => $category->amount,
-                'created_at' => $category->created_at->toDateTimeString(),
-                'deleted_at' => (Carbon::now())->toDateTimeString(),
-            ]);
+        $this->assertDatabaseCount('categories', 1);
+
+        /**
+         * @var $category Category
+         */
+        $category = Category::withTrashed()->first();
+
+        $this->assertNotNull($category);
+        $this->assertNotNull($category->deleted_at);
     }
 
     /**
@@ -606,10 +573,6 @@ class CategoryTest extends TestCase
 
         $this->assertDatabaseCount('categories', 1)
             ->assertDatabaseHas('categories', [
-                'id'         => $category->id,
-                'name'       => $category->name,
-                'amount'     => $category->amount,
-                'created_at' => $category->created_at->toDateTimeString(),
                 'deleted_at' => $category->deleted_at,
             ]);
 
@@ -619,10 +582,6 @@ class CategoryTest extends TestCase
 
         $this->assertDatabaseCount('categories', 1)
             ->assertDatabaseHas('categories', [
-                'id'         => $category->id,
-                'name'       => $category->name,
-                'amount'     => $category->amount,
-                'created_at' => $category->created_at->toDateTimeString(),
                 'deleted_at' => null,
             ]);
     }

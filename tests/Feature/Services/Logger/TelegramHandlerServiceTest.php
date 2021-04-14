@@ -9,7 +9,6 @@ use Tests\TestCase;
 
 class TelegramHandlerServiceTest extends TestCase
 {
-
     private $config;
     private $message = "PHPUnit test message";
 

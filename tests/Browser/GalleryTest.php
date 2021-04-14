@@ -24,27 +24,23 @@ class GalleryTest extends DuskTestCase
     /**
      * @throws Throwable
      */
-    public function testGalleryPageGuestRenderedCorrectly()
+    public function test_gallery_page_rendered_correctly()
     {
-        $this->browse(function (Browser $browser) {
+        $message = __('Gallery');
+
+        $this->browse(function (Browser $browser) use ($message) {
             $browser->assertGuest()
                 ->visit($this->galleryUrl)
                 ->assertPathIs($this->galleryUrl)
-                ->assertSee('Gallery');
+                ->assertSee($message);
         });
-    }
 
-    /**
-     * @throws Throwable
-     */
-    public function testGalleryPageAuthRenderedCorrectly()
-    {
-        $this->browse(function (Browser $browser) {
+        $this->browse(function (Browser $browser) use ($message) {
             $browser->loginAs($this->user)
                 ->assertAuthenticatedAs($this->user)
                 ->visit($this->galleryUrl)
                 ->assertPathIs($this->galleryUrl)
-                ->assertSee('Gallery');
+                ->assertSee($message);
         });
     }
 }
