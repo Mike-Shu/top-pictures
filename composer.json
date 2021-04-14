@@ -19,7 +19,8 @@
         "guzzlehttp/guzzle": "^7.0.1",
         "laravel/framework": "^8.12",
         "laravel/tinker": "^2.5",
-        "pion/laravel-chunk-upload": "^1.4"
+        "pion/laravel-chunk-upload": "^1.4",
+        "predis/predis": "^1.1"
     },
     "require-dev": {
         "barryvdh/laravel-debugbar": "^3.5",
@@ -48,7 +49,10 @@
             "App\\": "app/",
             "Database\\Factories\\": "database/factories/",
             "Database\\Seeders\\": "database/seeders/"
-        }
+        },
+        "files": [
+            "app/helpers.php"
+        ]
     },
     "autoload-dev": {
         "psr-4": {

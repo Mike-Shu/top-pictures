@@ -13,22 +13,24 @@ class UploadController extends Controller
 {
 
     /**
-     * Возвращает страницу с диалогом для загрузки изображений.
+     * Возвращает страницу с формой для загрузки изображений.
      *
      * @return Application|Factory|View
      */
-    public function index()
+    public function index(int $category_id = 0)
     {
 
         return view('pages.upload', [
             'config' => json_encode(
-                config('uploading.resumable')
+                config('interface.uploading.resumable')
             ),
         ]);
 
     }
 
     /**
+     * Загружает один файл или часть файла.
+     *
      * @param  UploaderService  $uploader
      *
      * @return JsonResponse

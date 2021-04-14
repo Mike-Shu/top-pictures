@@ -25,8 +25,8 @@ class UploaderTest extends TestCase
         parent::setUp();
 
         // Куда будем загружать файл.
-        $this->storageDisk = config('uploading.storage.disk');
-        $this->storagePath = config('uploading.storage.path');
+        $this->storageDisk = config('interface.uploading.storage.disk');
+        $this->storagePath = config('interface.uploading.storage.path');
 
         // Куда будем загружать фрагмент.
         $this->chunkStorageDisk = config('chunk-upload.storage.disk');
@@ -39,7 +39,6 @@ class UploaderTest extends TestCase
         $this->file = UploadedFile::fake()
             ->image('image.jpg', 3840, 2160)
             ->mimeType('image/jpeg');
-
     }
 
     /**

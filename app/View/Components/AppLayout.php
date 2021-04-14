@@ -2,6 +2,8 @@
 
 namespace App\View\Components;
 
+use Closure;
+use Illuminate\Contracts\View\View;
 use Illuminate\View\Component;
 
 class AppLayout extends Component
@@ -9,7 +11,7 @@ class AppLayout extends Component
     /**
      * Get the view / contents that represents the component.
      *
-     * @return \Illuminate\View\View
+     * @return View|Closure|string
      */
     public function render()
     {

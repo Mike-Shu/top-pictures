@@ -2,6 +2,7 @@
 
 namespace App\Services\Uploader;
 
+use App\Events\ImageUploadedEvent;
 use App\Exceptions\UploaderException;
 use App\Models\Image;
 use App\Models\User;
@@ -79,8 +80,8 @@ class UploaderService
         $this->user = auth()->user();
 
         // Куда будем загружать файл.
-        $this->storageDisk = config('uploading.storage.disk');
-        $this->storagePath = config('uploading.storage.path');
+        $this->storageDisk = config('interface.uploading.storage.disk');
+        $this->storagePath = config('interface.uploading.storage.path');
 
         // Куда будем загружать фрагмент.
         $this->chunkStorageDisk = config('chunk-upload.storage.disk');
@@ -165,7 +166,7 @@ class UploaderService
             // Если тип файла не допущен для загрузки.
             if (!in_array(
                 $file->getMimeType(),
-                config('uploading.resumable.fileType')
+                config('interface.uploading.resumable.fileType')
             )) {
 
                 // Удалим временный файл (chunk).
@@ -244,7 +245,7 @@ class UploaderService
         }
 
         // Кладём META в БД.
-        $this->user
+        $image = $this->user
             ->images()
             ->create([
                 'name'      => $fileName,
@@ -253,6 +254,9 @@ class UploaderService
                 'width'     => $imageWidth,
                 'height'    => $imageHeight,
             ]);
+
+        // Кидаем событие о загруженном файле.
+        ImageUploadedEvent::dispatch($image);
 
         return response()->json([
             'status' => static::STATUS_OK,

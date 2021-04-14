@@ -26,7 +26,7 @@ module.exports = class Uploader {
         self.slider = new Slider(true);
 
         /**
-         * Набор основных параметров для приложения. Настраивается в "config/uploading.php".
+         * Набор основных параметров для приложения. Настраивается в "config/interface.php".
          * @type {*}
          */
         self.config = self._getConfig('input[name=_config]');
