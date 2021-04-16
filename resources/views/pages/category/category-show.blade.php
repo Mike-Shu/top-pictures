@@ -2,19 +2,16 @@
     <x-slot name="header">
 
         @auth
-            <div class="float-right">
+            <div class="float-right space-x-1">
+                {{-- Кнопка "Добавить изображения" --}}
+                <x-common.button-add-images
+                        :href="route('upload_form', [$category->id])"
+                        :title="__('Add images')"/>
+
                 {{-- Кнопка "Редактировать" --}}
-                <a href="{{ route('categories.edit', [$category->id]) }}">
-                    <x-gallery.list-item-button class="p-1" :title="__('Edit')">
-                        <!-- Heroicon name: solid/pencil -->
-                        <svg xmlns="http://www.w3.org/2000/svg"
-                             class="h-5 w-5 text-gray-500"
-                             viewBox="0 0 20 20"
-                             fill="currentColor">
-                            <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z"/>
-                        </svg>
-                    </x-gallery.list-item-button>
-                </a>
+                <x-common.button-item-edit
+                        :href="route('categories.edit', [$category->id])"
+                        :title="__('Edit')"/>
             </div>
         @endauth
 
@@ -28,7 +25,7 @@
 
         <div class="mt-0 flex flex-col sm:flex-row sm:flex-wrap sm:mt-1 sm:space-x-6">
             <x-category.meta-info
-                    :amount="$category->amount"
+                    :amount="$category->images_count"
                     :colors="$category->colors"
                     :deletedAt="$category->deleted_at"/>
         </div>
@@ -37,10 +34,33 @@
 
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6 bg-white border-b border-gray-200">
+            @if($images)
+
+                @if($paginator->hasPages())
+                    <div class="pb-6">
+                        {{ $paginator->links() }}
+                    </div>
+                @endif
+
+                <div>
+                    @foreach($images as $_image)
+                        <x-category.image :image="$_image"/>
+                    @endforeach
                 </div>
-            </div>
+
+                @if($paginator->hasPages())
+                    <div class="pt-6">
+                        {{ $paginator->links() }}
+                    </div>
+                @endif
+
+            @else
+                <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+                    <div class="p-6 bg-white border-b border-gray-200">
+                        {{ __('Not Found') }}
+                    </div>
+                </div>
+            @endif
         </div>
     </div>
 </x-app-layout>

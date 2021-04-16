@@ -19,10 +19,35 @@
                         <input name="_not_supported_url" type="hidden"
                                value="{{ route('ajax_uploader_not_supported') }}">
 
+                        <div class="mb-10">
+                            <x-label for="category-id" :value="__('Which category?')"/>
+                            <x-select id="category-id"
+                                      name="category_id"
+                                      class="block mt-1 w-2/5"
+                                      autofocus>
+
+                                <x-select-option :selectedId="$categoryId">
+                                    {{ __('Category not selected') }}
+                                </x-select-option>
+
+                                @if($categoriesList)
+
+                                    @foreach($categoriesList as $_category)
+                                        <x-select-option :id="$_category->id"
+                                                         :selectedId="$categoryId">
+                                            {{ $_category->name }}
+                                        </x-select-option>
+                                    @endforeach
+
+                                @endif
+
+                            </x-select>
+                        </div>
+
                         <div id="drop-area"
                              class="flex items-center justify-center border-4 border-gray-100 border-dashed h-16">
                             <div>
-                                {!! __('Drop image files here to upload or :link.', ['link' => '<span class="cursor-pointer text-indigo-700 hover:text-indigo-500" id="browse-button">' . __('select from your computer') . '</span>']) !!}
+                                {!! __('Drop image files here to upload or :link.', ['link' => '<span class="cursor-pointer text-indigo-700 hover:text-indigo-500" id="browse-button">' . __('select them on your device') . '</span>']) !!}
                             </div>
                         </div>
 
@@ -48,6 +73,8 @@
         </div>
     </div>
 
-    @push('scripts')<script src="{{ asset('js/upload.js') }}"></script>@endpush
+    @push('scripts')
+        <script src="{{ asset('js/upload.js') }}"></script>
+    @endpush
 
 </x-app-layout>

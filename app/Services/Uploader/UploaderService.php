@@ -209,9 +209,10 @@ class UploaderService
 
         $fileContent = $file->getContent();
         $fileName = md5($fileContent);
-        $fileExt = $file->getClientOriginalExtension();
+        $fileExt = mb_strtolower($file->getClientOriginalExtension());
         $fileSize = $file->getSize();
         $fileTmpPath = $file->getPathname(); // Полный путь к временному файлу.
+        $fileDescription = $file->getClientOriginalName();
 
         list($imageWidth, $imageHeight) = getimagesize($fileTmpPath);
 
@@ -248,11 +249,13 @@ class UploaderService
         $image = $this->user
             ->images()
             ->create([
-                'name'      => $fileName,
-                'extension' => $fileExt,
-                'size'      => $fileSize,
-                'width'     => $imageWidth,
-                'height'    => $imageHeight,
+                'category_id' => (int)$this->request->get('category_id'),
+                'name'        => $fileName,
+                'extension'   => $fileExt,
+                'size'        => $fileSize,
+                'width'       => $imageWidth,
+                'height'      => $imageHeight,
+                'description' => $fileDescription,
             ]);
 
         // Кидаем событие о загруженном файле.

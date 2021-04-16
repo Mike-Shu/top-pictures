@@ -2,8 +2,8 @@
 
 namespace App\Models;
 
-use App\Services\Category\Casts\ColorsCast;
-use App\Services\Category\Casts\DescriptionCast;
+use App\Casts\ColorsCast;
+use App\Casts\DescriptionCast;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -17,8 +17,8 @@ class Category extends Model
     protected $fillable = [
         'name',
         'description',
-        'amount',
         'colors',
+        'cover_image_id',
     ];
 
     protected $casts = [
@@ -32,7 +32,7 @@ class Category extends Model
     /**
      * @return HasMany
      */
-    public function image(): HasMany
+    public function images(): HasMany
     {
         return $this->hasMany(Image::class);
     }

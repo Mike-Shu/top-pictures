@@ -2,14 +2,28 @@
 
 namespace Tests\Feature;
 
+use Exception;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Schema;
+use Psr\SimpleCache\InvalidArgumentException;
 use Tests\TestCase;
 
 class HelpersTest extends TestCase
 {
     use RefreshDatabase;
+
+    private $runtimeCacheValue;
+    private $runtimeCacheKey;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->runtimeCacheValue = 'some value';
+        $this->runtimeCacheKey = md5($this->runtimeCacheValue);
+
+    }
 
     /**
      * Тестируем функцию "set_table_comment()".
@@ -40,5 +54,33 @@ class HelpersTest extends TestCase
         // Убедимся, что комментарий успешно добавлен.
         $actualComment = HelpersTestTools::getTableComment($db, $tableName);
         $this->assertEquals($expectedComment, $actualComment);
+    }
+
+    /**
+     * Тестируем функцию "runtime_cache()".
+     */
+    public function test_runtime_cache()
+    {
+        $this->assertTrue(
+            runtime_cache(
+                $this->runtimeCacheKey,
+                $this->runtimeCacheValue
+            )
+        );
+
+        $this->assertEquals(
+            $this->runtimeCacheValue,
+            runtime_cache($this->runtimeCacheKey)
+        );
+    }
+
+    /**
+     * Функция "runtime_cache()" должна хранить значение только на время выполнения скрипта.
+     */
+    public function test_runtime_cache_get_again()
+    {
+        $this->assertNull(
+            runtime_cache($this->runtimeCacheKey)
+        );
     }
 }

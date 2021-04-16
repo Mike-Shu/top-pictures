@@ -42,10 +42,10 @@ class CreateImagesTable extends Migration
             $table->unsignedInteger('size')
                 ->comment('Размер файла');
 
-            $table->boolean('pending')
-                ->default(true)
+            $table->boolean('processed')
+                ->default(false)
                 ->index()
-                ->comment('Ожидает обработки');
+                ->comment('Обработано?');
 
             $table->text('description')
                 ->nullable();
@@ -57,10 +57,6 @@ class CreateImagesTable extends Migration
             $table->unsignedSmallInteger('height')
                 ->index()
                 ->comment('Высота изображения');
-
-            $table->boolean('visible')
-                ->default(true)
-                ->comment('Видимость на сайте');
 
             $table->timestamps();
             $table->softDeletes();

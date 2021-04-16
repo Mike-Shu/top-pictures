@@ -22,7 +22,7 @@ Route::middleware(['auth'])->group(function () {
             'destroy'
         ]);
 
-    Route::get('/upload/{category_id?}', [UploadController::class, 'index'])
+    Route::get('/upload/{categoryId?}', [UploadController::class, 'index'])
         ->name('upload_form');
 
     Route::get('/dashboard', [DashboardController::class, 'index'])

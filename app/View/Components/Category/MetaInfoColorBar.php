@@ -28,6 +28,6 @@ class MetaInfoColorBar extends Component
      */
     public function render()
     {
-        return view('components.category.meat-info-color-bar');
+        return view('components.category.meta-info-color-bar');
     }
 }

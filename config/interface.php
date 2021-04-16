@@ -4,14 +4,21 @@ return [
     /**
      * Категория.
      */
-    'category'  => [
+    'category' => [
 
         // Количество категорий на одной странице.
-        'per_page' => 7,
+        'per_page'        => 7,
         // Максимальная длина названия для категории.
         'name_max_length' => 64,
         // Максимальная длина описания для категории.
         'desc_max_length' => 512,
+
+    ],
+
+    'image'     => [
+
+        // Количество изображений на одной странице.
+        'per_page' => 7,
 
     ],
     /**
@@ -25,6 +32,38 @@ return [
             'disk' => env('UPLOADER_STORAGE_DISK', 'local'),
             // Каталог на диске (относительный путь внутри хранилища). Например: "some/path".
             'path' => env('UPLOADER_STORAGE_PATH', 'images'),
+        ],
+
+        // Миниатюры.
+        'thumbs'    => [
+            // Диск для хранения сгенерированных миниатюр. Например: "public" или "s3".
+            'disk'   => env('UPLOADER_THUMBS_STORAGE_DISK', 'public'),
+            // Основной каталог на диске (относительный путь внутри диска). Например: "thumbs".
+            'path'   => env('UPLOADER_THUMBS_STORAGE_PATH', 'thumbs'),
+            'large'  => [
+                // Каталог для больших миниатюр (относительный путь внутри основного каталога).
+                'path'    => env('UPLOADER_THUMBS_LARGE_PATH', 'large'),
+                // Ширина миниатюры (px).
+                'width'   => env('UPLOADER_THUMBS_LARGE_WIDTH', 1168),
+                // Качество миниатюры при сжатии файла.
+                'quality' => env('UPLOADER_THUMBS_LARGE_QUALITY', 80),
+            ],
+            'middle' => [
+                // Каталог для средних миниатюр (относительный путь внутри основного каталога).
+                'path'    => env('UPLOADER_THUMBS_MIDDLE_PATH', 'middle'),
+                // Ширина миниатюры (px).
+                'width'   => env('UPLOADER_THUMBS_MIDDLE_WIDTH', 400),
+                // Качество миниатюры при сжатии файла.
+                'quality' => env('UPLOADER_THUMBS_MIDDLE_QUALITY', 80),
+            ],
+            'small'  => [
+                // Каталог для средних миниатюр (относительный путь внутри основного каталога).
+                'path'    => env('UPLOADER_THUMBS_SMALL_PATH', 'small'),
+                // Ширина миниатюры (px).
+                'width'   => env('UPLOADER_THUMBS_SMALL_WIDTH', 100),
+                // Качество миниатюры при сжатии файла.
+                'quality' => env('UPLOADER_THUMBS_SMALL_QUALITY', 80),
+            ],
         ],
 
         /**

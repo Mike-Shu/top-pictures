@@ -56,7 +56,7 @@ class UploadTest extends DuskTestCase
                 )
                 ->assertSee(
                     __('Drop image files here to upload or :link.', [
-                        'link' => __('select from your computer')
+                        'link' => __('select them on your device')
                     ])
                 );
         });

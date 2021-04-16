@@ -28,13 +28,13 @@ class CreateCategoriesTable extends Migration
             $table->text('description')
                 ->nullable();
 
-            $table->unsignedInteger('amount')
-                ->default(0)
-                ->comment('Количество изображений');
-
             $table->json('colors')
                 ->nullable()
                 ->comment('Основные цвета');
+
+            $table->foreignId('cover_image_id')
+                ->default(0)
+                ->comment('Обложка');
 
             $table->timestamps();
             $table->softDeletes();

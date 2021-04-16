@@ -38,24 +38,27 @@ module.exports = class Uploader {
          * @type {Resumable}
          */
         self.Loader = new Resumable({
-            fileType: self.config.fileType,
-            chunkSize: self.config.chunkSize,
-            // chunkSize: 1024 * 100,
-            testChunks: self.config.testChunks,
-            maxChunkRetries: self.config.maxChunkRetries,
-            simultaneousUploads: self.config.simultaneousUploads,
-            maxFileSize: self.config.maxFileSize,
+            fileType:                    self.config.fileType,
+            chunkSize:                   self.config.chunkSize,
+            testChunks:                  self.config.testChunks,
+            maxChunkRetries:             self.config.maxChunkRetries,
+            simultaneousUploads:         self.config.simultaneousUploads,
+            maxFileSize:                 self.config.maxFileSize,
             prioritizeFirstAndLastChunk: true,
-            target: self._getUploadUrl('input[name=_upload_url]'),
-            query: {
-                _token: self._getToken('input[name=_token]'),
+            target:                      self._getUploadUrl(
+                'input[name=_upload_url]'),
+            query:                       () => {
+                return {
+                    _token:      self._getToken('input[name=_token]'),
+                    category_id: self._getSelectedId('select[name=category_id'),
+                };
             },
-            generateUniqueIdentifier: self._generateUniqueIdentifier,
-            fileTypeErrorCallback: self._fileTypeErrorCallback,
-            minFileSizeErrorCallback: self._minFileSizeErrorCallback,
-            maxFileSizeErrorCallback: self._maxFileSizeErrorCallback,
-            maxFiles: self.config.maxFiles,
-            maxFilesErrorCallback: self._maxFilesErrorCallback,
+            generateUniqueIdentifier:    self._generateUniqueIdentifier,
+            fileTypeErrorCallback:       self._fileTypeErrorCallback,
+            minFileSizeErrorCallback:    self._minFileSizeErrorCallback,
+            maxFileSizeErrorCallback:    self._maxFileSizeErrorCallback,
+            maxFiles:                    self.config.maxFiles,
+            maxFilesErrorCallback:       self._maxFilesErrorCallback,
         });
 
         // Убедимся, что браузер пользователя умеет работать с расширенным HTML.
@@ -713,7 +716,7 @@ module.exports = class Uploader {
      */
     _minFileSizeErrorCallback(file, errorCount) {
 
-        const self = this;
+        // const self = this;
 
         debug(`Error filesize: ${file.size}`);
 
@@ -811,6 +814,22 @@ module.exports = class Uploader {
             'an error occurred while retrieving the support URL value');
 
         return $url.value.trim();
+
+    }
+
+    /**
+     * Возвращает ID категории, в которую будут добавлены загруженные изображения.
+     *
+     * @param selector
+     * @returns {*}
+     * @private
+     */
+    _getSelectedId(selector) {
+
+        const $select = this._getObjectBySelector(selector,
+            'an error occurred while retrieving the category id value');
+
+        return $select.value.trim();
 
     }
 

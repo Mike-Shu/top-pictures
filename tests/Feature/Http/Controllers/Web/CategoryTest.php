@@ -4,6 +4,7 @@ namespace Tests\Feature\Http\Controllers\Web;
 
 use App\Http\Requests\Category\CategoryStoreRequest;
 use App\Models\Category;
+use App\Models\Image;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
@@ -512,9 +513,10 @@ class CategoryTest extends TestCase
     public function test_empty_category_must_be_deleted()
     {
         Category::truncate();
+        Image::truncate();
 
         Category::factory()
-            ->empty()
+            ->fullHouse()
             ->create();
 
         $this->assertDatabaseCount('categories', 1);
@@ -532,15 +534,21 @@ class CategoryTest extends TestCase
     public function test_not_empty_category_must_be_archived()
     {
         Category::truncate();
+        Image::truncate();
 
         Category::factory()
-            ->notEmpty()
+            ->fullHouse()
+            ->create();
+
+        Image::factory()
             ->create();
 
         $this->assertDatabaseCount('categories', 1)
             ->assertDatabaseHas('categories', [
                 'deleted_at' => null,
             ]);
+
+        $this->assertDatabaseCount('images', 1);
 
         $this->actingAs($this->user)
             ->delete($this->destroyUrl)
@@ -563,6 +571,7 @@ class CategoryTest extends TestCase
     public function test_archived_category_can_be_restored()
     {
         Category::truncate();
+        Image::truncate();
 
         /**
          * @var $category Category
@@ -571,10 +580,15 @@ class CategoryTest extends TestCase
             ->fullHouse(true)
             ->create();
 
+        Image::factory()
+            ->create();
+
         $this->assertDatabaseCount('categories', 1)
             ->assertDatabaseHas('categories', [
                 'deleted_at' => $category->deleted_at,
             ]);
+
+        $this->assertDatabaseCount('images', 1);
 
         $this->actingAs($this->user)
             ->delete($this->destroyUrl)

@@ -3,15 +3,22 @@
 namespace App\Listeners;
 
 use App\Events\ImageUploadedEvent;
-use App\Models\Image;
+use App\Services\Image\ProcessImageService;
 use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Queue\InteractsWithQueue;
-use Illuminate\Support\Facades\Log;
 
 class ProcessImageListener implements ShouldQueue
 {
-    public function __construct()
+    /**
+     * @var ProcessImageService
+     */
+    private $service;
+
+    /**
+     * @param  ProcessImageService  $service
+     */
+    public function __construct(ProcessImageService $service)
     {
+        $this->service = $service;
     }
 
     /**
@@ -19,8 +26,8 @@ class ProcessImageListener implements ShouldQueue
      */
     public function handle(ImageUploadedEvent $event)
     {
-        $image = $event->image;
-        $image->pending = false;
-        $image->save();
+        $this->service->setImage($event->image)
+            ->makeThumbs()
+            ->processingComplete();
     }
 }

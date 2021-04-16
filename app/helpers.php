@@ -1,5 +1,7 @@
 <?php
 
+use Illuminate\Contracts\Cache\Repository;
+
 if (!function_exists('empty_one_of')) {
 
     /**
@@ -132,6 +134,36 @@ if (!function_exists('set_table_comment')) {
             );
 
         }
+    }
+
+}
+
+if (!function_exists('runtime_cache')) {
+
+    /**
+     * Кеширование значений только на время выполнения скрипта. Пример использования:
+     * ```
+     * $cacheKey = md5('some string');
+     * runtime_cache($cacheKey, 'some data');
+     * // ...
+     * $someData = runtime_cache($cacheKey);
+     * ```
+     *
+     * @return bool|Repository|mixed
+     */
+    function runtime_cache()
+    {
+        $arguments = func_get_args();
+
+        if (empty($arguments)) {
+            return Cache::store('array');
+        }
+
+        if (count($arguments) == 1 && is_string($arguments[0])) {
+            return Cache::store('array')->get(...$arguments);
+        }
+
+        return Cache::store('array')->put(...$arguments);
     }
 
 }

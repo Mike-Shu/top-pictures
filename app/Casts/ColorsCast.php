@@ -1,15 +1,11 @@
 <?php
 
-namespace App\Services\Category\Casts;
+namespace App\Casts;
 
-use App\Services\Category\Items\ColorItem;
+use App\Items\ColorItem;
+use Illuminate\Contracts\Database\Eloquent\CastsAttributes;
 
-/**
- * Типизация для столбца "colors".
- *
- * @package App\Services\Category\Casts
- */
-class ColorsCast implements \Illuminate\Contracts\Database\Eloquent\CastsAttributes
+class ColorsCast implements CastsAttributes
 {
     /**
      * @inheritDoc

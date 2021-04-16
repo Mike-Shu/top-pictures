@@ -27,7 +27,7 @@
         </svg>
         @if($colors)
             @foreach($colors as $_item)
-                <x-category.meat-info-color-bar :color="$_item->color"/>
+                <x-category.meta-info-color-bar :color="$_item->color"/>
             @endforeach
         @endif
     </x-category.meta-info-item>

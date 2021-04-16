@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\Category;
+use App\Models\Image;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -18,8 +19,12 @@ class DatabaseSeeder extends Seeder
             UserSeeder::class,
         ]);
 
-        Category::factory()
-            ->count(42)
-            ->create();
+//        Category::factory()
+//            ->count(5)
+//            ->create();
+//
+//        Image::factory()
+//            ->count(100)
+//            ->create();
     }
 }

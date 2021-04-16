@@ -25,7 +25,7 @@ class CategoryFactory extends Factory
         $connection = null
     ) {
         parent::__construct($count, $states, $has, $for, $afterMaking, $afterCreating, $connection);
-        $this->now = Carbon::now();
+        $this->now = now();
     }
 
     public function definition(): array
@@ -37,53 +37,19 @@ class CategoryFactory extends Factory
 
         $colors = $this->getColors();
 
-        $amount = empty($colors)
-            ? 0
-            : $this->faker->randomNumber(4);
-
-        $deleted = ($amount && $this->faker->boolean(30))
+        $deleted = $this->faker->boolean(30)
             ? $this->now
             : null;
 
         return [
-            'name'        => $this->faker->words(3, true),
-            'description' => $desc,
-            'amount'      => $amount,
-            'colors'      => $colors,
-            'created_at'  => $this->now,
-            'updated_at'  => $this->now,
-            'deleted_at'  => $deleted,
+            'name'           => $this->faker->words(3, true),
+            'description'    => $desc,
+            'colors'         => $colors,
+            'cover_image_id' => 0,
+            'created_at'     => $this->now,
+            'updated_at'     => $this->now,
+            'deleted_at'     => $deleted,
         ];
-    }
-
-    /**
-     * Состояние: гарантирует не удаленную пустую категорию.
-     *
-     * @return CategoryFactory
-     */
-    public function empty(): CategoryFactory
-    {
-        return $this->state(function () {
-            return [
-                'amount'     => 0,
-                'deleted_at' => null,
-            ];
-        });
-    }
-
-    /**
-     * Состояние: гарантирует не удаленную и не пустую категорию.
-     *
-     * @return CategoryFactory
-     */
-    public function notEmpty(): CategoryFactory
-    {
-        return $this->state(function () {
-            return [
-                'amount'     => $this->faker->randomNumber(4),
-                'deleted_at' => null,
-            ];
-        });
     }
 
     /**
@@ -103,7 +69,6 @@ class CategoryFactory extends Factory
         return $this->state(function () use ($deleted) {
             return [
                 'description' => $this->faker->text,
-                'amount'      => $this->faker->randomNumber(4),
                 'colors'      => $this->getColors(true),
                 'deleted_at'  => $deleted,
             ];

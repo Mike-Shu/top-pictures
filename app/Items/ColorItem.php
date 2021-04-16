@@ -1,15 +1,14 @@
 <?php
 
-namespace App\Services\Category\Items;
+namespace App\Items;
 
 /**
- * Объект "Основной цвет" для отображения в категориях.
+ * "Основной цвет" для отображения в категориях.
  *
- * @package App\Services\Category\Items
+ * @package App\Items
  */
-class ColorItem
+class ColorItem extends BaseItem implements FromArrayable
 {
-
     /**
      * HEX-кодировка цвета (например: "#E7D62C").
      *
@@ -35,14 +34,14 @@ class ColorItem
     }
 
     /**
-     * Заполняет объект данными из переданного массива.
-     *
-     * @param  array  $data
+     * @inheritDoc
+     * @return $this
      */
-    public function fromArray(array $data)
+    public function fromArray(array $data): ColorItem
     {
         $this->color = trim($data['color']);
         $this->amount = (int)$data['amount'];
-    }
 
+        return $this;
+    }
 }

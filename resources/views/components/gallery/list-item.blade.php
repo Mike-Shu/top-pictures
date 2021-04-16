@@ -15,7 +15,7 @@
 
         <div class="mt-1 flex flex-col sm:flex-row sm:flex-wrap sm:mt-0 sm:space-x-6">
             <x-category.meta-info
-                    :amount="$category->amount"
+                    :amount="$category->images_count"
                     :colors="$category->colors"
                     :deletedAt="$category->deleted_at"/>
         </div>
@@ -23,45 +23,27 @@
     </div>
 
     @auth
-        <div class="mt-5 flex lg:mt-0 lg:ml-4">
+        <div class="mt-5 flex lg:mt-0 lg:ml-4 space-x-1">
 
             {{-- Кнопка "Добавить изображения" --}}
-            <a href="{{ route('upload_form', [$category->id]) }}">
-                <x-gallery.list-item-button :title="__('Add images')">
-                    <!-- Heroicon name: solid/view-grid-add -->
-                    <svg xmlns="http://www.w3.org/2000/svg"
-                         class="h-5 w-5 text-gray-500"
-                         viewBox="0 0 20 20"
-                         fill="currentColor">
-                        <path d="M5 3a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2V5a2 2 0 00-2-2H5zM5 11a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2v-2a2 2 0 00-2-2H5zM11 5a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V5zM14 11a1 1 0 011 1v1h1a1 1 0 110 2h-1v1a1 1 0 11-2 0v-1h-1a1 1 0 110-2h1v-1a1 1 0 011-1z" />
-                    </svg>
-                </x-gallery.list-item-button>
-            </a>
+            <x-common.button-add-images
+                    :href="route('upload_form', [$category->id])"
+                    :title="__('Add images')"/>
 
-            &nbsp;
             {{-- Кнопка "Редактировать" --}}
-            <a href="{{ route('categories.edit', [$category->id]) }}">
-                <x-gallery.list-item-button :title="__('Edit')">
-                    <!-- Heroicon name: solid/pencil -->
-                    <svg xmlns="http://www.w3.org/2000/svg"
-                         class="h-5 w-5 text-gray-500"
-                         viewBox="0 0 20 20"
-                         fill="currentColor">
-                        <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z"/>
-                    </svg>
-                </x-gallery.list-item-button>
-            </a>
+            <x-common.button-item-edit
+                    :href="route('categories.edit', [$category->id])"
+                    :title="__('Edit')"/>
 
             {{-- Если в категории нет изображений --}}
-            @if($category->amount == 0)
+            @if($category->images_count == 0)
 
-                &nbsp;
                 {{-- Кнопка "Удалить" --}}
                 <x-gallery.list-item-delete-form :category="$category">
                     <x-gallery.list-item-button :title="__('Delete')">
                         <!-- Heroicon name: solid/trash -->
                         <svg xmlns="http://www.w3.org/2000/svg"
-                             class="h-5 w-5 text-gray-500"
+                             class="h-5 w-5 text-red-400"
                              viewBox="0 0 20 20"
                              fill="currentColor">
                             <path fill-rule="evenodd"
@@ -75,13 +57,31 @@
 
                 @if($category->deleted_at)
 
-                    &nbsp;
                     {{-- Кнопка "Достать из архива" --}}
                     <x-gallery.list-item-delete-form :category="$category">
                         <x-gallery.list-item-button :title="__('Get it from the archive')">
+                            <!-- Heroicon name: outline/receipt-refund -->
+                            <svg xmlns="http://www.w3.org/2000/svg"
+                                 class="h-5 w-5 text-purple-400"
+                                 fill="none"
+                                 viewBox="0 0 24 24"
+                                 stroke="currentColor">
+                                <path stroke-linecap="round"
+                                      stroke-linejoin="round"
+                                      stroke-width="2"
+                                      d="M16 15v-1a4 4 0 00-4-4H8m0 0l3 3m-3-3l3-3m9 14V5a2 2 0 00-2-2H6a2 2 0 00-2 2v16l4-2 4 2 4-2 4 2z" />
+                            </svg>
+                        </x-gallery.list-item-button>
+                    </x-gallery.list-item-delete-form>
+
+                @else
+
+                    {{-- Кнопка "Удалить в архив" --}}
+                    <x-gallery.list-item-delete-form :category="$category">
+                        <x-gallery.list-item-button :title="__('Delete to archive')">
                             <!-- Heroicon name: outline/archive -->
                             <svg xmlns="http://www.w3.org/2000/svg"
-                                 class="h-5 w-5 text-green-400"
+                                 class="h-5 w-5 text-purple-400"
                                  fill="none"
                                  viewBox="0 0 24 24"
                                  stroke="currentColor">
@@ -89,25 +89,6 @@
                                       stroke-linejoin="round"
                                       stroke-width="2"
                                       d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4"/>
-                            </svg>
-                        </x-gallery.list-item-button>
-                    </x-gallery.list-item-delete-form>
-
-                @else
-
-                    &nbsp;
-                    {{-- Кнопка "Удалить в архив" --}}
-                    <x-gallery.list-item-delete-form :category="$category">
-                        <x-gallery.list-item-button :title="__('Delete to archive')">
-                            <!-- Heroicon name: solid/archive -->
-                            <svg xmlns="http://www.w3.org/2000/svg"
-                                 class="h-5 w-5 text-red-300"
-                                 viewBox="0 0 20 20"
-                                 fill="currentColor">
-                                <path d="M4 3a2 2 0 100 4h12a2 2 0 100-4H4z"/>
-                                <path fill-rule="evenodd"
-                                      d="M3 8h14v7a2 2 0 01-2 2H5a2 2 0 01-2-2V8zm5 3a1 1 0 011-1h2a1 1 0 110 2H9a1 1 0 01-1-1z"
-                                      clip-rule="evenodd"/>
                             </svg>
                         </x-gallery.list-item-button>
                     </x-gallery.list-item-delete-form>

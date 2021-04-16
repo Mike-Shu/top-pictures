@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Web;
 
 use App\Http\Controllers\Controller;
+use App\Models\Category;
 use App\Services\Uploader\UploaderService;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
@@ -15,17 +16,23 @@ class UploadController extends Controller
     /**
      * Возвращает страницу с формой для загрузки изображений.
      *
+     * @param  int  $categoryId
+     *
      * @return Application|Factory|View
      */
-    public function index(int $category_id = 0)
+    public function index(int $categoryId = 0)
     {
+        $categoriesList = Category::withTrashed()
+            ->get()
+            ->all();
 
         return view('pages.upload', [
-            'config' => json_encode(
+            'categoriesList' => $categoriesList,
+            'categoryId'     => $categoryId,
+            'config'         => json_encode(
                 config('interface.uploading.resumable')
             ),
         ]);
-
     }
 
     /**
@@ -37,9 +44,7 @@ class UploadController extends Controller
      */
     public function upload(UploaderService $uploader): JsonResponse
     {
-
         return $uploader->uploadFile();
-
     }
 
 }

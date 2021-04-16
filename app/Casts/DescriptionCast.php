@@ -1,16 +1,11 @@
 <?php
 
+namespace App\Casts;
 
-namespace App\Services\Category\Casts;
+use Illuminate\Contracts\Database\Eloquent\CastsAttributes;
 
-/**
- * Типизация для столбца "description".
- *
- * @package App\Services\Category\Casts
- */
-class DescriptionCast implements \Illuminate\Contracts\Database\Eloquent\CastsAttributes
+class DescriptionCast implements CastsAttributes
 {
-
     /**
      * @inheritDoc
      */

@@ -4,6 +4,7 @@ namespace App\Services\Category;
 
 use App\Http\Requests\Category\CategoryStoreRequest;
 use App\Http\Requests\Category\CategoryUpdateRequest;
+use App\Items\ImageItem;
 use App\Models\Category;
 use App\Services\CommonTools;
 use Auth;
@@ -12,8 +13,10 @@ use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
@@ -24,6 +27,18 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
  */
 class CategoryService
 {
+    /**
+     * @var Request
+     */
+    private $request;
+
+    /**
+     * @param  Request  $request
+     */
+    public function __construct(Request $request)
+    {
+        $this->request = $request;
+    }
 
     /**
      * Возвращает страницу "Галерея".
@@ -55,12 +70,54 @@ class CategoryService
     {
         $category = $this->getCategory($id);
 
+        list($list, $images) = $this->getCategoryImages($category);
+
         return view(
             'pages.category.category-show',
             [
-                'category' => $category
+                'category'  => $category,
+                'images'    => $images,
+                'paginator' => $list,
             ]
         );
+    }
+
+    /**
+     * @param  Category  $category
+     *
+     * @return array
+     */
+    private function getCategoryImages(Category $category): array
+    {
+        $page = $this->request->get('page') ?? 1;
+        $cacheKey = md5("category{$category->id}{$page}");
+
+        $cached = Cache::get($cacheKey);
+
+        if (!empty($cached)) {
+            return $cached;
+        }
+
+        $list = $category->images()
+            ->where('processed', true)
+            ->paginate(
+                config('interface.image.per_page')
+            );
+
+        $images = array_map(function ($_item) {
+
+            return new ImageItem($_item);
+
+        }, $list->items());
+
+        $result = [
+            $list,
+            $images,
+        ];
+
+        Cache::put($cacheKey, $result, 60);
+
+        return $result;
     }
 
     /**
@@ -131,7 +188,7 @@ class CategoryService
     {
         $category = $this->getCategory($id);
 
-        if ($category->amount) {
+        if ($category->images()->count()) {
 
             // Если категория не пустая, то…
             try {
@@ -203,8 +260,11 @@ class CategoryService
     private function getCategoryByAuth(int $id, bool $auth): ?Category
     {
         return $auth
-            ? Category::withTrashed()->find($id)
-            : Category::find($id);
+            ? Category::withTrashed()
+                ->withCount($this->withCountStatement())
+                ->find($id)
+            : Category::withCount($this->withCountStatement())
+                ->find($id);
     }
 
     /**
@@ -219,14 +279,29 @@ class CategoryService
         $perPage = config('interface.category.per_page');
 
         return $auth
-            // Для авторизованных пользователей.
+            // Для авторизованных пользователей (все категории, включая архивные и пустые):
             ? Category::withTrashed()
+                ->withCount($this->withCountStatement()) // Посчитать кол-во изображений.
                 ->orderBy('name')
                 ->paginate($perPage)
-            // Для гостей.
-            : Category::where('amount', '>', 0)
+            // Для гостей (только не архивные и не пустые категории):
+            : Category::withCount($this->withCountStatement())
+                ->whereHas('images', function (Builder $query) {
+                    $query->where('processed',true);
+                })
                 ->orderBy('name')
                 ->paginate($perPage);
     }
 
+    /**
+     * @return array []
+     */
+    private function withCountStatement(): array
+    {
+        return [
+            'images' => function (Builder $query) {
+                $query->where('processed', true);
+            }
+        ];
+    }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Casts\DescriptionCast;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -21,12 +22,14 @@ class Image extends Model
         'description',
         'width',
         'height',
-        'visible',
     ];
 
     protected $casts = [
-        'pending' => 'boolean',
-        'visible' => 'boolean',
+        'description' => DescriptionCast::class,
+        'processed'   => 'boolean',
+        'created_at'  => 'datetime',
+        'updated_at'  => 'datetime',
+        'deleted_at'  => 'datetime',
     ];
 
     /**
