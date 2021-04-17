@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use Exception;
 use Illuminate\Console\Command;
 use Storage;
 
@@ -57,6 +58,7 @@ class Reborn extends Command
             config('interface.uploading.thumbs.path'),
         );
 
+        $this->info('File deletion completed successfully.');
         $this->info('Ok');
 
         return 0;
@@ -68,7 +70,13 @@ class Reborn extends Command
      */
     private function removePath(string $disk, string $path): void
     {
-        Storage::disk($disk)
-            ->deleteDirectory($path);
+        try {
+
+            Storage::disk($disk)
+                ->deleteDirectory($path);
+
+        } catch (Exception $e) {
+            $this->error($e->getMessage());
+        }
     }
 }
