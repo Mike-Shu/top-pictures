@@ -167,3 +167,28 @@ if (!function_exists('runtime_cache')) {
     }
 
 }
+
+if (!function_exists('dec2hex')) {
+
+    /**
+     * Возвращает полное шестнадцатеричное представление цвета, например:
+     *  - 0        => #000000;
+     *  - 128      => #000080;
+     *  - 16777215 => #ffffff.
+     *
+     * @param  int   $num
+     * @param  bool  $sharp
+     *
+     * @return string
+     */
+    function dec2hex(int $num, bool $sharp = true): string
+    {
+        $hex = dechex(abs($num));
+
+        $prefix = $sharp ? '#' : '';
+        $value = substr('000000'.$hex, -6);
+
+        return $prefix.$value;
+    }
+
+}

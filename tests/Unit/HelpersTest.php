@@ -89,4 +89,32 @@ class HelpersTest extends TestCase
             not_empty(null)
         );
     }
+
+    /**
+     * Тестируем функцию "dec2hex()".
+     *
+     * @return void
+     */
+    public function test_dec2hex()
+    {
+        $this->assertEquals(
+            '#000000',
+            dec2hex(0)
+        );
+
+        $this->assertEquals(
+            '#000080',
+            dec2hex(128)
+        );
+
+        $this->assertEquals(
+            '#ffffff',
+            dec2hex(16777215)
+        );
+
+        $this->assertEquals(
+            '#ffffff',
+            dec2hex(-16777215)
+        );
+    }
 }
