@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use App\Casts\ColorsCast;
+use App\Casts\CategoryColorsCast;
 use App\Casts\DescriptionCast;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -23,7 +23,7 @@ class Category extends Model
 
     protected $casts = [
         'description' => DescriptionCast::class,
-        'colors'      => ColorsCast::class,
+        'colors'      => CategoryColorsCast::class,
         'created_at'  => 'datetime',
         'updated_at'  => 'datetime',
         'deleted_at'  => 'datetime',

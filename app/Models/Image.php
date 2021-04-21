@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Casts\DescriptionCast;
+use App\Casts\ImagePaletteCast;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -26,6 +27,7 @@ class Image extends Model
 
     protected $casts = [
         'description' => DescriptionCast::class,
+        'palette'     => ImagePaletteCast::class,
         'processed'   => 'boolean',
         'created_at'  => 'datetime',
         'updated_at'  => 'datetime',

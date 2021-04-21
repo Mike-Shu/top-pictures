@@ -3,11 +3,11 @@
 namespace App\Items;
 
 /**
- * "Основной цвет" для отображения в категориях.
+ * Один цвет в палитре для изображения.
  *
  * @package App\Items
  */
-class ColorItem extends BaseItem implements FromArrayable
+class ImageColorItem extends BaseItem implements FromArrayable
 {
     /**
      * HEX-кодировка цвета (например: "#E7D62C").
@@ -17,11 +17,11 @@ class ColorItem extends BaseItem implements FromArrayable
     public $color = '#000';
 
     /**
-     * Количество изображений, которые были сопоставлены с этим цветом.
+     * Условный вес цвета: чем выше значение, тем наиболее доминирующим является цвет (10-100).
      *
      * @var int
      */
-    public $amount = 0;
+    public $weight = 0;
 
     /**
      * @param  array|null  $data
@@ -35,12 +35,11 @@ class ColorItem extends BaseItem implements FromArrayable
 
     /**
      * @inheritDoc
-     * @return $this
      */
-    public function fromArray(array $data): ColorItem
+    public function fromArray(array $data): ImageColorItem
     {
-        $this->color = trim($data['color']);
-        $this->amount = (int)$data['amount'];
+        $this->color = $data['color'];
+        $this->weight = $data['weight'];
 
         return $this;
     }

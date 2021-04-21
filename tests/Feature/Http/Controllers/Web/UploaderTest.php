@@ -4,6 +4,7 @@ namespace Tests\Feature\Http\Controllers\Web;
 
 use App\Models\User;
 use App\Services\Uploader\UploaderService;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\Testing\File;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Artisan;
@@ -13,6 +14,8 @@ use Tests\TestCase;
 
 class UploaderTest extends TestCase
 {
+    use RefreshDatabase;
+
     private $storageDisk;
     private $storagePath;
     private $chunkStorageDisk;

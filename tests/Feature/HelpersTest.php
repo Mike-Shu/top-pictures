@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Items\RgbColorItem;
 use Exception;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -81,6 +82,26 @@ class HelpersTest extends TestCase
     {
         $this->assertNull(
             runtime_cache($this->runtimeCacheKey)
+        );
+    }
+
+    /**
+     * Тестируем функцию "rgb2reference_hex()".
+     *
+     * @return void
+     */
+    public function test_rgb2reference_hex()
+    {
+        $rgb = new RgbColorItem([1, 2, 3]);
+
+        $this->assertEquals(
+            '#000000',
+            rgb2reference_hex($rgb)
+        );
+
+        $this->assertEquals(
+            '000000',
+            rgb2reference_hex($rgb, false)
         );
     }
 }

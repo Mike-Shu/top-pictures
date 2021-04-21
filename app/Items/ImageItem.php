@@ -85,9 +85,14 @@ class ImageItem extends BaseItem implements FromModelable
     public $user = null;
 
     /**
-     * @var ThumbsItem
+     * @var ThumbListItem
      */
     public $thumbs;
+
+    /**
+     * @var ImagePaletteItem
+     */
+    public $palette;
 
     /**
      * @var Image
@@ -146,6 +151,7 @@ class ImageItem extends BaseItem implements FromModelable
         $this->updated_at = $model->updated_at;
         $this->deleted_at = $model->deleted_at;
         $this->thumbs = $this->getThumbs();
+        $this->palette = $model->palette;
 
         return $this;
     }
@@ -199,11 +205,11 @@ class ImageItem extends BaseItem implements FromModelable
     /**
      * Возвращает коллекцию с миниатюрами для текущего изображения.
      *
-     * @return ThumbsItem
+     * @return ThumbListItem
      */
-    private function getThumbs(): ThumbsItem
+    private function getThumbs(): ThumbListItem
     {
-        return new ThumbsItem([
+        return new ThumbListItem([
             'large'  => $this->getThumb(ProcessImageService::LARGE_THUMB_TYPE),
             'medium' => $this->getThumb(ProcessImageService::MIDDLE_THUMB_TYPE),
             'small'  => $this->getThumb(ProcessImageService::SMALL_THUMB_TYPE),

@@ -1,10 +1,10 @@
 <?php
 
-namespace Tests\Unit;
+namespace Tests\Unit\helpers;
 
 use PHPUnit\Framework\TestCase;
 
-class HelpersTest extends TestCase
+class EmptyFunctionsTest extends TestCase
 {
     /**
      * Тестируем функцию "empty_one_of()".
@@ -87,34 +87,6 @@ class HelpersTest extends TestCase
 
         $this->assertFalse(
             not_empty(null)
-        );
-    }
-
-    /**
-     * Тестируем функцию "dec2hex()".
-     *
-     * @return void
-     */
-    public function test_dec2hex()
-    {
-        $this->assertEquals(
-            '#000000',
-            dec2hex(0)
-        );
-
-        $this->assertEquals(
-            '#000080',
-            dec2hex(128)
-        );
-
-        $this->assertEquals(
-            '#ffffff',
-            dec2hex(16777215)
-        );
-
-        $this->assertEquals(
-            '#ffffff',
-            dec2hex(-16777215)
         );
     }
 }

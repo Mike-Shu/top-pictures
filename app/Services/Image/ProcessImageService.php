@@ -5,15 +5,17 @@ namespace App\Services\Image;
 
 
 use App\Exceptions\ProcessImageException;
+use App\Items\ImageColorItem;
+use App\Items\ImagePaletteItem;
+use App\Items\RgbColorItem;
 use App\Models\Image;
+use ColorThief\ColorThief;
 use Exception;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Filesystem\FilesystemAdapter;
 use Illuminate\Support\Facades\App;
-use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
-use Intervention\Image\Exception\NotFoundException;
 use Intervention\Image\ImageManager;
 
 class ProcessImageService
@@ -130,7 +132,6 @@ class ProcessImageService
      */
     public function makeThumbs(): ProcessImageService
     {
-
         try {
 
             $this->makeThumb(static::LARGE_THUMB_TYPE);
@@ -147,7 +148,30 @@ class ProcessImageService
         }
 
         return $this;
+    }
 
+    /**
+     * Получает для исходного изображения цветовую палитру.
+     *
+     * @return $this
+     */
+    public function getPalette(): ProcessImageService
+    {
+        try {
+
+            $palette = $this->getPaletteFromImage();
+            $this->savePalette($palette);
+
+        } catch (ProcessImageException $e) {
+
+            if (App::environment('testing') === false) { // @codeCoverageIgnore
+                $eMessage = mb_strtolower($e->getMessage());
+                Log::warning(__METHOD__.": {$this->imageName}: {$eMessage}");
+            }
+
+        }
+
+        return $this;
     }
 
     /**
@@ -208,6 +232,102 @@ class ProcessImageService
         } catch (Exception $e) {
             throw new ProcessImageException($e->getMessage(), $e->getCode(), $e);
         }
+    }
+
+    /**
+     * Возвращает палитру цветов для исходного изображения.
+     *
+     * @return ImagePaletteItem
+     * @throws ProcessImageException
+     */
+    private function getPaletteFromImage(): ImagePaletteItem
+    {
+        try {
+
+            // Подготавливаем исходное изображение.
+            $imageContent = $this->getImageContent();
+            $image = $this->manager->make($imageContent);
+
+            // Вырезаем из него центральную область и уменьшаем до 100 пикселей (оптимизация производительности).
+            $image->fit(100);
+            $fitImage = $image->stream('jpg')->getContents();
+
+            // Получаем основной и дополнительные цвета.
+            $imagePalette = new ImagePaletteItem();
+            $imagePalette->mainColor = $this->getMainColor($fitImage);
+            $imagePalette->additionalColors = $this->getAdditionalColors($fitImage);
+
+            return $imagePalette;
+
+        } catch (Exception $e) {
+            throw new ProcessImageException($e->getMessage(), $e->getCode(), $e);
+        }
+    }
+
+    /**
+     * Возвращает основной цвет для текущего изображения.
+     *
+     * @param  string  $imageContent
+     *
+     * @return ImageColorItem
+     * @throws ProcessImageException
+     */
+    private function getMainColor(string $imageContent): ImageColorItem
+    {
+        $parsedRgb = ColorThief::getColor($imageContent);
+
+        if (!empty($parsedRgb)) {
+
+            $rgb = new RgbColorItem($parsedRgb);
+
+            $result = new ImageColorItem();
+            $result->color = rgb2reference_hex($rgb);
+            $result->weight = 100;
+
+        } else {
+
+            throw new ProcessImageException(
+                'Failed to get dominant color',
+                500
+            );
+
+        }
+
+        return $result;
+    }
+
+    /**
+     * Возвращает коллекцию дополнительных цветов для текущего изображения.
+     *
+     * @param  string  $imageContent
+     *
+     * @return array
+     */
+    private function getAdditionalColors(string $imageContent): array
+    {
+        $palette = ColorThief::getPalette($imageContent, 8);
+
+        return array_map(function ($_parsedRgb, $_index) {
+
+            $rgb = new RgbColorItem($_parsedRgb);
+
+            $color = new ImageColorItem();
+            $color->color = rgb2reference_hex($rgb);
+            $color->weight = 90 - ($_index * 10);
+
+            return $color;
+
+        }, $palette, array_keys($palette));
+    }
+
+    /**
+     * Сохраняет палитру для текущего изображения.
+     *
+     * @param  ImagePaletteItem  $palette
+     */
+    private function savePalette(ImagePaletteItem $palette): void
+    {
+        $this->image->palette = $palette;
     }
 
     /**

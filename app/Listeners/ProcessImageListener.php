@@ -28,6 +28,7 @@ class ProcessImageListener implements ShouldQueue
     {
         $this->service->setImage($event->image)
             ->makeThumbs()
+            ->getPalette()
             ->processingComplete();
     }
 }

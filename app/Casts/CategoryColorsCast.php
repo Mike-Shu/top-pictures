@@ -2,10 +2,10 @@
 
 namespace App\Casts;
 
-use App\Items\ColorItem;
+use App\Items\CategoryColorItem;
 use Illuminate\Contracts\Database\Eloquent\CastsAttributes;
 
-class ColorsCast implements CastsAttributes
+class CategoryColorsCast implements CastsAttributes
 {
     /**
      * @inheritDoc
@@ -20,7 +20,7 @@ class ColorsCast implements CastsAttributes
 
             $result = array_map(function($_item){
 
-                return new ColorItem($_item);
+                return new CategoryColorItem($_item);
 
             }, $colors);
 

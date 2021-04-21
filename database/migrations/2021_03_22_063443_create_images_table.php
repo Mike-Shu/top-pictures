@@ -58,6 +58,10 @@ class CreateImagesTable extends Migration
                 ->index()
                 ->comment('Высота изображения');
 
+            $table->json('palette')
+                ->nullable()
+                ->comment('Цветовая палитра');
+
             $table->timestamps();
             $table->softDeletes();
 

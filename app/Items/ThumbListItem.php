@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Model;
  *
  * @package App\Items
  */
-class ThumbsItem extends BaseItem implements FromArrayable
+class ThumbListItem extends BaseItem implements FromArrayable
 {
     /**
      * @var string
@@ -39,7 +39,7 @@ class ThumbsItem extends BaseItem implements FromArrayable
     /**
      * @inheritDoc
      */
-    public function fromArray(array $data): ThumbsItem
+    public function fromArray(array $data): ThumbListItem
     {
         $this->large = $data['large'];
         $this->medium = $data['medium'];

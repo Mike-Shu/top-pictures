@@ -1,5 +1,7 @@
 <?php
 
+use App\Items\RgbColorItem;
+use App\Services\ReferenceColors\ReferenceColorsConverter;
 use Illuminate\Contracts\Cache\Repository;
 
 if (!function_exists('empty_one_of')) {
@@ -171,7 +173,7 @@ if (!function_exists('runtime_cache')) {
 if (!function_exists('dec2hex')) {
 
     /**
-     * Возвращает полное шестнадцатеричное представление цвета, например:
+     * Конвертирует десятичное представление цвета в шестнадцатеричное, например:
      *  - 0        => #000000;
      *  - 128      => #000080;
      *  - 16777215 => #ffffff.
@@ -191,4 +193,77 @@ if (!function_exists('dec2hex')) {
         return $prefix.$value;
     }
 
+}
+
+if (!function_exists('hex2rgb',)) {
+
+    /**
+     * Конвертирует шестнадцатеричное представление цвета в RGB, например:
+     * ```
+     * #ff8000 => [255, 128, 0]
+     * ```
+     *
+     * Внимание! Функция не умеет работать с сокращениями, например: значение "#fff" будет воспринято как "#000fff".
+     *
+     * @param  string  $hex
+     *
+     * @return array
+     */
+    function hex2rgb(string $hex): array
+    {
+        $hex = substr('000000'.ltrim($hex, '#'), -6);
+
+        return array_map(function ($component) {
+
+            return (int)base_convert($component, 16, 10);
+
+        }, str_split($hex, 2));
+    }
+
+}
+
+if (!function_exists('rgb2hex',)) {
+
+    /**
+     * Конвертирует RGB-представление цвета в шестнадцатеричное, например:
+     * ```
+     * [255, 128, 0] => #ff8000
+     * ```
+     *
+     * @param  RgbColorItem  $rgb
+     * @param  bool          $sharp
+     *
+     * @return string
+     */
+    function rgb2hex(RgbColorItem $rgb, bool $sharp = true): string
+    {
+        $prefix = $sharp ? '#' : '';
+
+        $value = sprintf(
+            "%02x%02x%02x",
+            ...array_map('intval', array_values(
+                $rgb->toArray()
+            ))
+        );
+
+        return $prefix.$value;
+    }
+
+}
+
+if (!function_exists('rgb2reference_hex')) {
+
+    /**
+     * Для указанного цвета возвращает ближайший цвет из эталонной палитры (в шестнадцатеричном представлении).
+     * Например: [255, 128, 0] => #ff8000
+     *
+     * @param  RgbColorItem  $rgb  Цвет в RGB-представлении.
+     * @param  bool          $sharp
+     *
+     * @return string
+     */
+    function rgb2reference_hex(RgbColorItem $rgb, bool $sharp = true): string
+    {
+        return ReferenceColorsConverter::getReferenceHexColorByRgb($rgb, $sharp);
+    }
 }
