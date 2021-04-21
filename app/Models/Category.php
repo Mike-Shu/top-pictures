@@ -36,19 +36,4 @@ class Category extends Model
     {
         return $this->hasMany(Image::class);
     }
-
-    /**
-     * Проверяет категорию на уникальность.
-     * Вернёт "true", если указанное имя уже есть в БД.
-     *
-     * @param  Builder  $query
-     * @param  string   $name
-     *
-     * @return bool
-     */
-    public function scopeNotUnique(Builder $query, string $name): bool
-    {
-        return $query->where('name', $name)->exists();
-    }
-
 }

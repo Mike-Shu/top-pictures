@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\Model;
  * Базовая сущность.
  *
  * @package App\Items
+ * @codeCoverageIgnore
  */
 class BaseItem implements ArrayAccess, Arrayable
 {

@@ -4,6 +4,11 @@ namespace App\Exceptions;
 
 use Exception;
 
+/**
+ * @codeCoverageIgnore
+ *
+ * @package App\Exceptions
+ */
 class ProcessImageException extends Exception
 {
     /**

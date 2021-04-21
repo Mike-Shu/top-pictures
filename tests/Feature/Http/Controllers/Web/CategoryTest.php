@@ -259,6 +259,10 @@ class CategoryTest extends TestCase
             ->fullHouse()
             ->create();
 
+        Image::factory()
+            ->processed()
+            ->create();
+
         $this->assertDatabaseCount('categories', 1);
 
         // Для гостя.

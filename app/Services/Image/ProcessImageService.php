@@ -138,12 +138,14 @@ class ProcessImageService
             $this->makeThumb(static::MIDDLE_THUMB_TYPE);
             $this->makeThumb(static::SMALL_THUMB_TYPE);
 
-        } catch (ProcessImageException $e) {
+        } catch (ProcessImageException $e) {// @codeCoverageIgnore
 
-            if (App::environment('testing') === false) { // @codeCoverageIgnore
+            // @codeCoverageIgnoreStart
+            if (App::environment('testing') === false) {
                 $eMessage = mb_strtolower($e->getMessage());
                 Log::warning(__METHOD__.": {$this->imageName}: {$eMessage}");
             }
+            // @codeCoverageIgnoreEnd
 
         }
 
@@ -162,12 +164,14 @@ class ProcessImageService
             $palette = $this->getPaletteFromImage();
             $this->savePalette($palette);
 
-        } catch (ProcessImageException $e) {
+        } catch (ProcessImageException $e) { // @codeCoverageIgnore
 
-            if (App::environment('testing') === false) { // @codeCoverageIgnore
+            // @codeCoverageIgnoreStart
+            if (App::environment('testing') === false) {
                 $eMessage = mb_strtolower($e->getMessage());
                 Log::warning(__METHOD__.": {$this->imageName}: {$eMessage}");
             }
+            // @codeCoverageIgnoreEnd
 
         }
 
@@ -229,8 +233,8 @@ class ProcessImageService
 
             $this->storageThumbDisk->put($putTo, $putContent);
 
-        } catch (Exception $e) {
-            throw new ProcessImageException($e->getMessage(), $e->getCode(), $e);
+        } catch (Exception $e) { // @codeCoverageIgnore
+            throw new ProcessImageException($e->getMessage(), $e->getCode(), $e); // @codeCoverageIgnore
         }
     }
 
@@ -259,8 +263,8 @@ class ProcessImageService
 
             return $imagePalette;
 
-        } catch (Exception $e) {
-            throw new ProcessImageException($e->getMessage(), $e->getCode(), $e);
+        } catch (Exception $e) { // @codeCoverageIgnore
+            throw new ProcessImageException($e->getMessage(), $e->getCode(), $e); // @codeCoverageIgnore
         }
     }
 
@@ -286,10 +290,12 @@ class ProcessImageService
 
         } else {
 
+            // @codeCoverageIgnoreStart
             throw new ProcessImageException(
                 'Failed to get dominant color',
                 500
             );
+            // @codeCoverageIgnoreEnd
 
         }
 

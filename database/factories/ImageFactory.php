@@ -2,16 +2,41 @@
 
 namespace Database\Factories;
 
-use App\Models\Category;
+use App\Items\ImageColorItem;
+use App\Items\ImagePaletteItem;
 use App\Models\Image;
-use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Illuminate\Support\Carbon;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 class ImageFactory extends Factory
 {
     protected $model = Image::class;
+
+    private $name;
+    private $storageThumbDisk;
+    private $storageThumbPath;
+
+    public function __construct(
+        $count = null,
+        ?Collection $states = null,
+        ?Collection $has = null,
+        ?Collection $for = null,
+        ?Collection $afterMaking = null,
+        ?Collection $afterCreating = null,
+        $connection = null
+    ) {
+        parent::__construct($count, $states, $has, $for, $afterMaking, $afterCreating, $connection);
+
+        $this->name = md5($this->faker->text);
+
+        $this->storageThumbDisk = Storage::disk(
+            config('interface.uploading.thumbs.disk')
+        );
+
+        $this->storageThumbPath = config('interface.uploading.thumbs.path');
+    }
 
     public function definition(): array
     {
@@ -25,9 +50,24 @@ class ImageFactory extends Factory
             'description' => $this->faker->text,
             'width'       => $this->faker->numberBetween(1024, 3840),
             'height'      => $this->faker->numberBetween(1024, 3840),
-            'created_at'  => Carbon::now(),
-            'updated_at'  => Carbon::now(),
+            'palette'     => $this->getPalette(),
+            'created_at'  => now(),
+            'updated_at'  => now(),
         ];
+    }
+
+    /**
+     * Состояние: гарантирует обработанное изображение.
+     *
+     * @return ImageFactory
+     */
+    public function processed(): ImageFactory
+    {
+        return $this->state(function (array $attributes) {
+            return [
+                'processed' => true,
+            ];
+        });
     }
 
     /**
@@ -45,5 +85,31 @@ class ImageFactory extends Factory
         $ids = array_column($ids, 'id');
 
         return $ids[array_rand($ids)];
+    }
+
+    private function getPalette(): ImagePaletteItem
+    {
+        $main = new ImageColorItem();
+        $main->color = get_random_color();
+        $main->weight = 100;
+
+        $additional = [];
+        $additionalCount = mt_rand(1, 7);
+
+        for ($x = 0; $x < $additionalCount; $x++) {
+
+            $color = new ImageColorItem();
+            $color->color = get_random_color();
+            $color->weight = 90 - ($x * 10);
+
+            $additional[] = $color;
+
+        }
+
+        $imagePalette = new ImagePaletteItem();
+        $imagePalette->mainColor = $main;
+        $imagePalette->additionalColors = $additional;
+
+        return $imagePalette;
     }
 }

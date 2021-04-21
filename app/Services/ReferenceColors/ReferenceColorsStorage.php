@@ -37,10 +37,10 @@ class ReferenceColorsStorage
      *
      * @return array
      */
-    public static function getColorsHex(bool $sharp = true, bool $useCache = true): array
-    {
-        return static::getColorsByType(static::HEX_TYPE, $useCache);
-    }
+//    public static function getColorsHex(bool $sharp = true, bool $useCache = true): array
+//    {
+//        return static::getColorsByType(static::HEX_TYPE, $useCache);
+//    }
 
     /**
      * Получить множество цветов в десятичном представлении.
@@ -49,10 +49,10 @@ class ReferenceColorsStorage
      *
      * @return array
      */
-    public static function getColorsDec(bool $useCache = true): array
-    {
-        return static::getColorsByType(static::DEC_TYPE, $useCache);
-    }
+//    public static function getColorsDec(bool $useCache = true): array
+//    {
+//        return static::getColorsByType(static::DEC_TYPE, $useCache);
+//    }
 
     /**
      * Получить все доступные множества.

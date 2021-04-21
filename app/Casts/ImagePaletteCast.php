@@ -11,7 +11,7 @@ class ImagePaletteCast implements CastsAttributes
     /**
      * @inheritDoc
      */
-    public function get($model, string $key, $value, array $attributes): ImagePaletteItem
+    public function get($model, string $key, $value, array $attributes): ?ImagePaletteItem
     {
         $result = null;
 

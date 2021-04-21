@@ -9,6 +9,7 @@ use App\Services\Image\ProcessImageService;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Filesystem\FilesystemAdapter;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 
@@ -260,12 +261,16 @@ class ImageItem extends BaseItem implements FromModelable
         try {
 
             $file = $this->storageThumbDisk->get($path);
-            list($result['width'], $result['height'], , $result['html']) = getimagesizefromstring($file);
+            list($result['width'], $result['height'], , $result['html']) = getimagesizefromstring($file); // @codeCoverageIgnore
 
-        } catch (FileNotFoundException $e) {
+        } catch (FileNotFoundException $e) { // @codeCoverageIgnore
 
-            $eMessage = mb_strtolower($e->getMessage());
-            Log::warning(__METHOD__.": {$eMessage}");
+            // @codeCoverageIgnoreStart
+            if (App::environment('testing') === false) {
+                $eMessage = mb_strtolower($e->getMessage());
+                Log::warning(__METHOD__.": {$eMessage}");
+            }
+            // @codeCoverageIgnoreStop
 
         }
 

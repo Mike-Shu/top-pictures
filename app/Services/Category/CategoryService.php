@@ -16,6 +16,7 @@ use Illuminate\Contracts\View\View;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -239,8 +240,12 @@ class CategoryService
 
         if (empty($category)) {
 
-            $caller = CommonTools::getCaller(2);
-            Log::warning("The category #{$id} was not found: {$caller}");
+            // @codeCoverageIgnoreStart
+            if (App::environment('testing') === false) {
+                $caller = CommonTools::getCaller(2);
+                Log::warning("The category #{$id} was not found: {$caller}");
+            }
+            // @codeCoverageIgnoreEnd
 
             throw new NotFoundHttpException();
 
@@ -287,7 +292,7 @@ class CategoryService
             // Для гостей (только не архивные и не пустые категории):
             : Category::withCount($this->withCountStatement())
                 ->whereHas('images', function (Builder $query) {
-                    $query->where('processed',true);
+                    $query->where('processed', true);
                 })
                 ->orderBy('name')
                 ->paginate($perPage);
