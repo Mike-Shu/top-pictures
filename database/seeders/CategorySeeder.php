@@ -13,19 +13,23 @@ class CategorySeeder extends Seeder
     public function run()
     {
         Category::create([
-            'name' => 'Автоспорт',
+            'name'        => 'Автоспорт',
+            'description' => 'Гоночные мотоциклы, легковые и грузовые автомобили.',
         ]);
 
         Category::create([
-            'name' => 'Девушки',
+            'name'        => 'Девушки',
+            'description' => 'Милые девушки, изящные модели, гламурные модницы.',
         ]);
 
         Category::create([
-            'name' => 'Природа',
+            'name'        => 'Природа',
+            'description' => 'Красивые природные пейзажи.',
         ]);
 
         Category::create([
-            'name' => 'Прочее',
+            'name'        => 'Прочее',
+            'description' => '',
         ]);
     }
 }
