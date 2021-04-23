@@ -22,7 +22,7 @@ use Illuminate\Support\Facades\Log;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
- * Class CategoryService
+ * Основная работа с категориями (CRUD + ).
  *
  * @package App\Services\Category
  */
@@ -161,6 +161,8 @@ class CategoryService
     }
 
     /**
+     * Редактирует указанную категорию.
+     *
      * @param  CategoryUpdateRequest  $request
      * @param  int                    $id
      *

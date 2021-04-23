@@ -1,8 +1,6 @@
 <?php
 
-
 namespace App\Services\Image;
-
 
 use App\Exceptions\ProcessImageException;
 use App\Items\ImageColorItem;
@@ -19,11 +17,16 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Intervention\Image\ImageManager;
 
+/**
+ * Обработка вновь загруженного изображения.
+ *
+ * @package App\Services\Image
+ */
 class ProcessImageService
 {
-    const LARGE_THUMB_TYPE = 'large';
-    const MIDDLE_THUMB_TYPE = 'middle';
-    const SMALL_THUMB_TYPE = 'small';
+    const LARGE_THUMB_TYPE = 'large'; // Большая миниатюра.
+    const MIDDLE_THUMB_TYPE = 'middle'; // Средняя миниатюра.
+    const SMALL_THUMB_TYPE = 'small'; // Маленькая миниатюра.
 
     /**
      * Исходное изображение для обработки.

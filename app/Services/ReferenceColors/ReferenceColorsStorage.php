@@ -14,7 +14,7 @@ class ReferenceColorsStorage
 {
     const CACHE_TTL = (3600 * 1); // Время жизни кеша.
     const RGB_TYPE = "rgb"; // RGB-представление.
-    const HEX_TYPE = "hex"; // Шестнадцатеричном представление.
+    const HEX_TYPE = "hex"; // Шестнадцатеричное представление.
     const DEC_TYPE = "dec"; // Десятичное представление.
 
     /**
