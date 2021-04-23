@@ -288,3 +288,31 @@ if (!function_exists('rgb2reference_hex')) {
         return ReferenceColorsConverter::getReferenceHexColorByRgb($rgb, $sharp);
     }
 }
+
+if (!function_exists('bytes2human')) {
+
+    /**
+     * Возвращает размер файла, более приятный для восприятия человеком. Например: 1234567 => 1.18 MB
+     *
+     * @param $bytes
+     *
+     * @return string
+     * @codeCoverageIgnore
+     */
+    function bytes2human(int $bytes): string
+    {
+        $units = [
+            __('file-size.byte'),
+            __('file-size.kb'),
+            __('file-size.mb'),
+            __('file-size.gb'),
+        ];
+
+        for ($i = 0; $bytes >= 1024; $i++) {
+            $bytes /= 1024;
+        }
+
+        return round($bytes, 2).' '.$units[$i];
+    }
+
+}
