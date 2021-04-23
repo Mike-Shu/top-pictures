@@ -143,7 +143,7 @@ class ImageItem extends BaseItem implements FromModelable
         $this->id = $model->id;
         $this->name = $model->name;
         $this->extension = $model->extension;
-        $this->size = $model->size;
+        $this->size = bytes2human($model->size);
         $this->processed = $model->processed;
         $this->description = (string)$model->description;
         $this->width = $model->width;

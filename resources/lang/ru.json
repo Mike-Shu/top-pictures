@@ -229,5 +229,7 @@
     "Clear the list": "Очистить список",
     "Sorry, your browser does not support advanced HTML5 file download features.": "К сожалению, ваш браузер не поддерживает расширенные функции HTML5 для загрузки файлов.",
     "Exclude file from the list": "Исключить файл из списка",
-    "Stop uploading": "Прекратить загрузку"
+    "Stop uploading": "Прекратить загрузку",
+    "Click to download": "Кликни, чтобы скачать",
+    "Change category": "Сменить категорию"
 }

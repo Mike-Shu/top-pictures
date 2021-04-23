@@ -1,0 +1,1 @@
+<div class="text-xs sm:text-base">{{ $slot }}</div>

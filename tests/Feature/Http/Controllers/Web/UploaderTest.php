@@ -13,7 +13,6 @@ use Tests\TestCase;
 
 class UploaderTest extends TestCase
 {
-
     private $storageDisk;
     private $storagePath;
     private $chunkStorageDisk;

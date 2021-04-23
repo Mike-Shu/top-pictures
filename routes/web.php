@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Web\CategoryController;
 use App\Http\Controllers\Web\DashboardController;
+use App\Http\Controllers\Web\DownloadController;
 use App\Http\Controllers\Web\HomeController;
 use App\Http\Controllers\Web\UploadController;
 use Illuminate\Support\Facades\Route;
@@ -35,3 +36,6 @@ Route::resource('categories', CategoryController::class)
         'index',
         'show'
     ]);
+
+Route::get('download/{name}', DownloadController::class)
+    ->name('download');

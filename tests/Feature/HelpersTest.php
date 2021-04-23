@@ -4,6 +4,7 @@ namespace Tests\Feature;
 
 use App\Items\RgbColorItem;
 use Exception;
+use Illuminate\Contracts\Cache\Repository;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Schema;
@@ -83,6 +84,8 @@ class HelpersTest extends TestCase
         $this->assertNull(
             runtime_cache($this->runtimeCacheKey)
         );
+
+        $this->assertInstanceOf(Repository::class, runtime_cache());
     }
 
     /**
