@@ -22,7 +22,7 @@ use Illuminate\Support\Facades\Log;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
- * Основная работа с категориями (CRUD + ).
+ * Основная работа с категориями (а-ля CRUD).
  *
  * @package App\Services\Category
  */
