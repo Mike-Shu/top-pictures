@@ -113,6 +113,27 @@ if (!function_exists('get_random_color')) {
 
 }
 
+if (!function_exists('get_random_reference_color')) {
+
+    /**
+     * Возвращает случайный эталонный цвет в HEX-кодировке (например: "#ffdf55").
+     *
+     * @return string
+     * @codeCoverageIgnore
+     */
+    function get_random_reference_color(): string
+    {
+        $hex = get_random_color();
+
+        $rgb = new RgbColorItem(
+            hex2rgb($hex)
+        );
+
+        return rgb2reference_hex($rgb);
+    }
+
+}
+
 if (!function_exists('set_table_comment')) {
 
     /**
