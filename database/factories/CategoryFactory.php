@@ -56,20 +56,24 @@ class CategoryFactory extends Factory
      * Состояние: гарантирует заполнение всех полей в модели.
      *
      * @param  bool  $deleted  Если передать "true", то поле "deleted_at" примет значение "now()".
+     * @param  bool  $colors   Если передать "false", то поле "colors" заполнено не будет.
      *
      * @return CategoryFactory
      */
-    public function fullHouse(bool $deleted = false): CategoryFactory
+    public function fullHouse(bool $deleted = false, bool $colors = true): CategoryFactory
     {
-
         $deleted = $deleted
             ? $this->now
             : null;
 
-        return $this->state(function () use ($deleted) {
+        $colors = $colors
+            ? $this->getColors(true)
+            : null;
+
+        return $this->state(function () use ($deleted, $colors) {
             return [
                 'description' => $this->faker->text,
-                'colors'      => $this->getColors(true),
+                'colors'      => $colors,
                 'deleted_at'  => $deleted,
             ];
         });

@@ -9,6 +9,7 @@ use App\Items\ImageColorItem;
 use App\Items\ImagePaletteItem;
 use App\Items\RgbColorItem;
 use App\Models\Image;
+use Closure;
 use ColorThief\ColorThief;
 use Exception;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
@@ -180,11 +181,17 @@ class ProcessImageService
 
     /**
      * Ставит отметку о том, что обработка изображения завершена.
+     *
+     * @param  Closure|null  $closure
      */
-    public function processingComplete(): void
+    public function processingComplete(?Closure $closure = null): void
     {
         $this->image->processed = true;
         $this->image->save();
+
+        if (!is_null($closure)) {
+            $closure($this->image);
+        }
     }
 
     /**

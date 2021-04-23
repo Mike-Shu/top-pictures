@@ -9,23 +9,27 @@ module.exports = {
 
     theme: {
         extend: {
-            fontFamily: {
+            fontFamily:          {
                 sans: ['Nunito', ...defaultTheme.fontFamily.sans],
             },
-            keyframes: {
+            keyframes:           {
                 'fade-in-down': {
-                    '0%': {
-                        opacity: '0',
+                    '0%':   {
+                        opacity:   '0',
                         transform: 'translateY(-10px)',
                     },
                     '100%': {
-                        opacity: '1',
+                        opacity:   '1',
                         transform: 'none',
                     },
                 },
             },
-            animation: {
+            animation:           {
                 'fade-in-down': 'fade-in-down 0.5s cubic-bezier(0.42,0,0.58,1) 1',
+            },
+            gridTemplateColumns: {
+                '25': 'repeat(25, minmax(0, 1fr))',
+                '35': 'repeat(35, minmax(0, 1fr))',
             },
         },
     },

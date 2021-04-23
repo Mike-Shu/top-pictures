@@ -32,6 +32,10 @@ class CreateCategoriesTable extends Migration
                 ->nullable()
                 ->comment('Основные цвета');
 
+            $table->boolean('update_required')
+                ->default(false)
+                ->comment('Требуется обновление цветов');
+
             $table->foreignId('cover_image_id')
                 ->default(0)
                 ->comment('Обложка');

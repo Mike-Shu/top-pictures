@@ -16,7 +16,9 @@
                           clip-rule="evenodd"/>
                 </svg>
                 {{-- Основной цвет --}}
-                <x-category.meta-info-color-bar class="mr-1" :color="$image->palette->mainColor->color"/>
+                <x-category.meta-info-color-bar
+                        class="mr-1"
+                        :color="$image->palette->mainColor->color"/>
 
                 @auth
                     {{-- Дополнительные цвета --}}

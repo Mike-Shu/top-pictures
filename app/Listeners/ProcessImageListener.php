@@ -3,6 +3,8 @@
 namespace App\Listeners;
 
 use App\Events\ImageUploadedEvent;
+use App\Models\Image;
+use App\Services\Category\CountingColorsService;
 use App\Services\Image\ProcessImageService;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
@@ -29,6 +31,8 @@ class ProcessImageListener implements ShouldQueue
         $this->service->setImage($event->image)
             ->makeThumbs()
             ->getPalette()
-            ->processingComplete();
+            ->processingComplete(function(Image $image){
+                CountingColorsService::setUpdateRequired($image->category);
+            });
     }
 }

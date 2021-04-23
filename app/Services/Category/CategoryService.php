@@ -84,6 +84,8 @@ class CategoryService
     }
 
     /**
+     * Возвращает коллекцию изображений для указанной категории.
+     *
      * @param  Category  $category
      *
      * @return array

@@ -90,7 +90,7 @@ class ImageFactory extends Factory
     private function getPalette(): ImagePaletteItem
     {
         $main = new ImageColorItem();
-        $main->color = get_random_color();
+        $main->color = get_random_reference_color();
         $main->weight = 100;
 
         $additional = [];
@@ -99,7 +99,7 @@ class ImageFactory extends Factory
         for ($x = 0; $x < $additionalCount; $x++) {
 
             $color = new ImageColorItem();
-            $color->color = get_random_color();
+            $color->color = get_random_reference_color();
             $color->weight = 90 - ($x * 10);
 
             $additional[] = $color;

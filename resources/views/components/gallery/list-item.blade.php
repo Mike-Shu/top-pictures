@@ -13,7 +13,7 @@
             {{ $category->description }}
         @endif
 
-        <div class="mt-1 flex flex-col sm:flex-row sm:flex-wrap sm:mt-0 sm:space-x-6">
+        <div class="mt-1 flex flex-col items-start sm:flex-row sm:flex-wrap sm:mt-0 sm:space-x-6">
             <x-category.meta-info
                     :amount="$category->images_count"
                     :colors="$category->colors"
