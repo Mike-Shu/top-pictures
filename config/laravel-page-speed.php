@@ -11,7 +11,7 @@ return [
     | You would probably replace that in your local configuration to get a readable output.
     |
     */
-    'enable' => !env('APP_DEBUG', true),
+    'enable' => env('PAGE_SPEED', !env('APP_DEBUG', true)),
 
     /*
     |--------------------------------------------------------------------------
