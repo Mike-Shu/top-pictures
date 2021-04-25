@@ -97,7 +97,7 @@ class CategoryService
 
         $cached = Cache::get($cacheKey);
 
-        if (!empty($cached)) {
+        if (Auth::check() === false && !empty($cached)) {
             return $cached;
         }
 

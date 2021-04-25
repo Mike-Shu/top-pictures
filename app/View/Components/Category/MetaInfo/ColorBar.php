@@ -1,6 +1,6 @@
 <?php
 
-namespace App\View\Components\Category;
+namespace App\View\Components\Category\MetaInfo;
 
 use Closure;
 use Illuminate\Contracts\View\View;
@@ -9,9 +9,9 @@ use Illuminate\View\Component;
 /**
  * "Основной цвет" для отображения в категориях.
  *
- * @package App\View\Components\Category
+ * @package App\View\Components\Category\MetaInfo
  */
-class MetaInfoColorBar extends Component
+class ColorBar extends Component
 {
     public $color;
 
@@ -28,6 +28,6 @@ class MetaInfoColorBar extends Component
      */
     public function render()
     {
-        return view('components.category.meta-info-color-bar');
+        return view('components.category.meta-info.color-bar');
     }
 }

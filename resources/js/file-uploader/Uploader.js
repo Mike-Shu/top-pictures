@@ -1,7 +1,8 @@
 const debug = require('../common/debug');
 const Resumable = require('./Resumable');
-const UploaderException = require('./UploaderException');
-const ResponseException = require('./ResponseException');
+const DomTree = require('../common/DomTree');
+const UploaderException = require('../exceptions/UploaderException');
+const ResponseException = require('../exceptions/ResponseException');
 const Slider = require('../common/Slider');
 const formatBytes = require('../common/formatBytes');
 
@@ -79,7 +80,7 @@ module.exports = class Uploader {
      */
     _getConfig(selector) {
 
-        const $config = this._getObjectBySelector(selector,
+        const $config = DomTree.getObjectBySelector(selector,
             'an error occurred while retrieving the config value');
 
         return JSON.parse($config.value.trim());
@@ -97,7 +98,7 @@ module.exports = class Uploader {
 
         // Назначим загрузчику кнопку "Обзор".
         self.Loader.assignBrowse(
-            self._getObjectBySelector(
+            DomTree.getObjectBySelector(
                 '#browse-button',
                 'an error occurred while retrieving the "Browse button" object',
             ),
@@ -105,44 +106,44 @@ module.exports = class Uploader {
 
         // Назначим загрузчику область "Для перетаскивания".
         self.Loader.assignDrop(
-            self._getObjectBySelector(
+            DomTree.getObjectBySelector(
                 '#drop-area',
                 'an error occurred while retrieving the "Drop area" object',
             ),
         );
 
         // Контейнер со списком файлов.
-        self.$uploadingContainer = self._getObjectBySelector(
+        self.$uploadingContainer = DomTree.getObjectBySelector(
             '#uploading-container',
             'an error occurred while retrieving the "Uploading container" object',
         );
 
         // Список файлов для загрузки.
-        self.$uploadingList = self._getObjectBySelector(
+        self.$uploadingList = DomTree.getObjectBySelector(
             '#uploading-list',
             'an error occurred while retrieving the "Uploading list" object',
         );
 
         // Счетчик файлов в списке для загрузки.
-        self.$uploadingListCount = self._getObjectBySelector(
+        self.$uploadingListCount = DomTree.getObjectBySelector(
             '#uploading-list-count',
             'an error occurred while retrieving the "Uploading list count" object',
         );
 
         // Кнопка "Закачать файлы".
-        self.$startButton = self._getObjectBySelector(
+        self.$startButton = DomTree.getObjectBySelector(
             '#uploader-start-list',
             'an error occurred while retrieving the "Start button" object',
         );
 
         // Кнопка "Очистить список".
-        self.$clearButton = self._getObjectBySelector(
+        self.$clearButton = DomTree.getObjectBySelector(
             '#uploader-clear-list',
             'an error occurred while retrieving the "Clear button" object',
         );
 
         // Кнопка "Прекратить загрузку".
-        self.$stopButton = self._getObjectBySelector(
+        self.$stopButton = DomTree.getObjectBySelector(
             '#uploader-stop-list',
             'an error occurred while retrieving the "Stop button" object',
         );
@@ -257,7 +258,7 @@ module.exports = class Uploader {
         });
 
         // В процессе загрузки файлов что-то пошло не так.
-        self.Loader.on('error', (message, file) => {
+        self.Loader.on('error', (message) => {
 
             try {
                 debug('Error: ' + message);
@@ -285,7 +286,7 @@ module.exports = class Uploader {
 
         const self = this;
 
-        const $uploader = self._getObjectBySelector('#uploader',
+        const $uploader = DomTree.getObjectBySelector('#uploader',
             'an error occurred while retrieving the "uploader" object');
 
         const url = self._getNotSupportUrl('input[name=_not_supported_url]');
@@ -401,26 +402,21 @@ module.exports = class Uploader {
 
         const self = this;
 
-        fetch(url).
+        axios.get(url).
             then(response => {
 
-                if (!response.ok) {
-                    throw new ResponseException(response);
-                }
-
-                return response.text();
-
-            }).
-            then(html => {
-
                 const Parser = new DOMParser();
-                const Document = Parser.parseFromString(html, 'text/html');
+                const Document = Parser.parseFromString(response.data, 'text/html');
 
                 callback(Document);
 
             }).
             catch(err => {
-                self.logger.exception(err);
+
+                self.logger.exception(
+                    new ResponseException(err),
+                );
+
             });
 
     }
@@ -475,10 +471,9 @@ module.exports = class Uploader {
      */
     _getListItemById(file) {
 
-        const self = this;
         const selector = `#${file.uniqueIdentifier}`;
 
-        return self._getObjectBySelector(selector,
+        return DomTree.getObjectBySelector(selector,
             'an error occurred while retrieving the "list item" object');
 
     }
@@ -602,8 +597,8 @@ module.exports = class Uploader {
     /**
      * Удаляет из списка загрузки один файл.
      *
-     * @param {HTMLObjectElement} $item
-     * @param {function} [callback]
+     * @param {Element} $item
+     * @param {Function} [callback]
      * @private
      */
     _removeItemFromList($item, callback) {
@@ -762,10 +757,8 @@ module.exports = class Uploader {
      */
     _getToken(selector) {
 
-        const $token = this._getObjectBySelector(selector,
+        return DomTree.getValueBySelector(selector,
             'an error occurred while retrieving the token value');
-
-        return $token.value.trim();
 
     }
 
@@ -778,10 +771,8 @@ module.exports = class Uploader {
      */
     _getUploadUrl(selector) {
 
-        const $url = this._getObjectBySelector(selector,
+        return DomTree.getValueBySelector(selector,
             'an error occurred while retrieving the upload URL value');
-
-        return $url.value.trim();
 
     }
 
@@ -794,10 +785,8 @@ module.exports = class Uploader {
      */
     _getItemUrl(selector) {
 
-        const $url = this._getObjectBySelector(selector,
+        return DomTree.getValueBySelector(selector,
             'an error occurred while retrieving the item URL value');
-
-        return $url.value.trim();
 
     }
 
@@ -810,10 +799,8 @@ module.exports = class Uploader {
      */
     _getNotSupportUrl(selector) {
 
-        const $url = this._getObjectBySelector(selector,
+        return DomTree.getValueBySelector(selector,
             'an error occurred while retrieving the support URL value');
-
-        return $url.value.trim();
 
     }
 
@@ -826,43 +813,8 @@ module.exports = class Uploader {
      */
     _getSelectedId(selector) {
 
-        const $select = this._getObjectBySelector(selector,
+        return DomTree.getValueBySelector(selector,
             'an error occurred while retrieving the category id value');
-
-        return $select.value.trim();
-
-    }
-
-    /**
-     * Возвращает объект на основе переданного селектора.
-     *
-     * @param {string} selector
-     * @param {string} exceptMsg
-     * @returns {*}
-     * @private
-     */
-    _getObjectBySelector(selector, exceptMsg) {
-
-        const s = selector.trim();
-        const msg = exceptMsg.trim();
-
-        if (!s) {
-            throw new UploaderException(
-                'the "selector" parameter was not specified');
-        }
-
-        if (!msg) {
-            throw new UploaderException(
-                'the "exceptMsg" parameter was not specified');
-        }
-
-        const $obj = document.querySelector(s);
-
-        if (!$obj) {
-            throw new UploaderException(msg);
-        }
-
-        return $obj;
 
     }
 

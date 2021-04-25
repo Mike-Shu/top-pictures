@@ -1,6 +1,6 @@
 <?php
 
-namespace App\View\Components\Category;
+namespace App\View\Components\Category\MetaInfo;
 
 use Closure;
 use Illuminate\Contracts\View\View;
@@ -34,6 +34,6 @@ class MetaInfo extends Component
      */
     public function render()
     {
-        return view('components.category.meta-info');
+        return view('components.category.meta-info.meta-info');
     }
 }

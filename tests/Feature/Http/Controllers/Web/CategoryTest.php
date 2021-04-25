@@ -8,6 +8,7 @@ use App\Models\Image;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use Tests\Feature\Http\Controllers\ControllersTestTools;
 use Tests\TestCase;
@@ -272,6 +273,13 @@ class CategoryTest extends TestCase
 
         // Для пользователя.
         $this->actingAs($this->user)
+            ->get($this->showUrl)
+            ->assertOk();
+
+        // И снова для гостя, чтобы проверить кешированный вариант.
+        Auth::logout();
+
+        $this->assertGuest()
             ->get($this->showUrl)
             ->assertOk();
     }

@@ -1,7 +1,7 @@
 const Logger = require('../common/Logger');
 const Uploader = require('./Uploader');
 
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', () => {
 
     const logger = new Logger();
 
@@ -12,4 +12,3 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
 });
-

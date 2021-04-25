@@ -14,7 +14,7 @@
         @endif
 
         <div class="mt-1 flex flex-col items-start sm:flex-row sm:flex-wrap sm:mt-0 sm:space-x-6">
-            <x-category.meta-info
+            <x-category.meta-info.meta-info
                     :amount="$category->images_count"
                     :colors="$category->colors"
                     :deletedAt="$category->deleted_at"/>
