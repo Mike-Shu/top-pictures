@@ -192,6 +192,8 @@ class ProcessImageService
         $this->image->processed = true;
         $this->image->save();
 
+        $this->dropImageContent();
+
         if (!is_null($closure)) {
             $closure($this->image);
         }
@@ -269,7 +271,7 @@ class ProcessImageService
             // Получаем основной и дополнительные цвета.
             $imagePalette = new ImagePaletteItem();
             $imagePalette->mainColor = $this->getMainColor($fitImage);
-            $imagePalette->additionalColors = $this->getAdditionalColors($fitImage);
+            $imagePalette->additionalColors = $this->getAdditionalColors($fitImage, $imagePalette->mainColor);
 
             return $imagePalette;
 
@@ -315,15 +317,16 @@ class ProcessImageService
     /**
      * Возвращает коллекцию дополнительных цветов для текущего изображения.
      *
-     * @param  string  $imageContent
+     * @param  string          $imageContent
+     * @param  ImageColorItem  $mainColor
      *
      * @return array
      */
-    private function getAdditionalColors(string $imageContent): array
+    private function getAdditionalColors(string $imageContent, ImageColorItem $mainColor): array
     {
-        $palette = ColorThief::getPalette($imageContent, 8);
+        $palette = ColorThief::getPalette($imageContent);
 
-        return array_map(function ($_parsedRgb, $_index) {
+        $colors = array_map(function ($_parsedRgb, $_index) {
 
             $rgb = new RgbColorItem($_parsedRgb);
 
@@ -334,6 +337,32 @@ class ProcessImageService
             return $color;
 
         }, $palette, array_keys($palette));
+
+        // Добавим основной цвет в самое начало коллекции.
+        $colors = array_merge([$mainColor], $colors);
+
+        return $this->colorsUnique($colors);
+    }
+
+    /**
+     * Оставляет в коллекции только уникальные цвета.
+     *
+     * @param  array  $colors
+     * @param  int    $length  Сколько цветов должно остаться в итоговой коллекции?
+     *
+     * @return array
+     */
+    private function colorsUnique(array $colors, int $length = 7): array
+    {
+        $uniqueColors = array_unique(
+            array_column($colors, 'color')
+        );
+
+        $uniqueColors = array_values(
+            array_intersect_key($colors, $uniqueColors)
+        );
+
+        return array_slice($uniqueColors, 0, $length);
     }
 
     /**
@@ -363,5 +392,13 @@ class ProcessImageService
         $this->imageContent = $this->storageDisk->get($imagePath);
 
         return $this->imageContent;
+    }
+
+    /**
+     * Уничтожает кешированное содержимое текущего изображения.
+     */
+    private function dropImageContent(): void
+    {
+        $this->imageContent = null;
     }
 }
