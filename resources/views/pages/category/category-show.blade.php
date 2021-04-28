@@ -42,7 +42,7 @@
                     </div>
                 @endif
 
-                <div>
+                <div class="space-y-6">
                     @foreach($images as $_image)
                         <x-category.image :image="$_image"/>
                     @endforeach
@@ -63,4 +63,21 @@
             @endif
         </div>
     </div>
+
+    @auth
+        {{-- Управление изображением: изменить категорию --}}
+        <input type="hidden"
+               name="_categories_list_url"
+               value="{{ route('image-categories-list', [$category->id]) }}">
+
+        <input type="hidden"
+               name="_change_category_url"
+               value="{{ route('image-change-category') }}">
+
+        @push('scripts')
+            <script src="{{ asset('js/change-category.js') }}"></script>
+        @endpush
+        {{-- /Изменить категорию --}}
+    @endauth
+
 </x-app-layout>

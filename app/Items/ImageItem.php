@@ -76,9 +76,19 @@ class ImageItem extends BaseItem implements FromModelable
     public $deleted_at;
 
     /**
+     * @var int
+     */
+    public $category_id;
+
+    /**
      * @var Category|null
      */
     public $category = null;
+
+    /**
+     * @var int
+     */
+    public $user_id;
 
     /**
      * @var User|null
@@ -153,6 +163,8 @@ class ImageItem extends BaseItem implements FromModelable
         $this->deleted_at = $model->deleted_at;
         $this->thumbs = $this->getThumbs();
         $this->palette = $model->palette;
+        $this->category_id = $model->category_id;
+        $this->user_id = $model->user_id;
 
         return $this;
     }

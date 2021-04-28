@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Web\ImageController;
 use App\Http\Controllers\Web\UploadController;
 
 /**
@@ -20,5 +21,15 @@ Route::middleware(['auth'])->group(function () {
     // Маршрут для загрузки файлов.
     Route::post('/upload', [UploadController::class, 'upload'])
         ->name('ajax_upload_file');
+
+    Route::prefix('image')->group(function () {
+
+        Route::get('/categories-list/{excluded_id?}', [ImageController::class, 'getCategoriesList'])
+            ->name('image-categories-list');
+
+        Route::post('change-category', [ImageController::class, 'changeCategory'])
+            ->name('image-change-category');
+
+    });
 
 });
