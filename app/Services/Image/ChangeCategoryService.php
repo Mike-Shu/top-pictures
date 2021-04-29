@@ -2,14 +2,14 @@
 
 namespace App\Services\Image;
 
-use App\Exceptions\ChangeCategoryException;
+use App\Exceptions\NotFoundException;
 use App\Models\Category;
-use App\Models\Image;
 use App\Services\Category\CountingColorsService;
-use App\Services\CommonTools;
+use App\Services\RequestService;
+use App\Traits\GetCategory;
+use App\Traits\GetImage;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
@@ -20,25 +20,9 @@ use Illuminate\Support\Facades\Response;
  *
  * @package App\Services\Image
  */
-class ChangeCategoryService
+class ChangeCategoryService extends RequestService
 {
-    const STATUS_OK = "Ok"; // Перемещение выполнено успешно.
-    const STATUS_FAILED = "Failed"; // При перемещении что-то пошло не так.
-
-    const ERR_NOT_FOUND = 404; // Сущность не найдена.
-
-    /**
-     * @var Request
-     */
-    private $request;
-
-    /**
-     * @param  Request  $request
-     */
-    public function __construct(Request $request)
-    {
-        $this->request = $request;
-    }
+    use GetImage, GetCategory;
 
     /**
      * Возвращает список категорий для перемещения изображения.
@@ -82,7 +66,7 @@ class ChangeCategoryService
                 'status' => static::STATUS_OK,
             ]);
 
-        } catch (ChangeCategoryException $e) {
+        } catch (NotFoundException $e) {
 
             // @codeCoverageIgnoreStart
             if (App::environment('testing') === false) {
@@ -97,54 +81,6 @@ class ChangeCategoryService
             ], $e->getCode());
 
         }
-    }
-
-    /**
-     * @param  int  $id
-     *
-     * @return Image
-     * @throws ChangeCategoryException
-     */
-    private function getImage(int $id): Image
-    {
-        $image = Image::withTrashed()->find($id);
-
-        if (empty($image)) {
-
-            $caller = CommonTools::getCaller(1);
-
-            throw new ChangeCategoryException(
-                "The image #{$id} was not found: {$caller}",
-                static::ERR_NOT_FOUND,
-            );
-
-        }
-
-        return $image;
-    }
-
-    /**
-     * @param  int  $id
-     *
-     * @return Category
-     * @throws ChangeCategoryException
-     */
-    protected function getCategory(int $id): Category
-    {
-        $category = Category::withTrashed()->find($id);
-
-        if (empty($category)) {
-
-            $caller = CommonTools::getCaller(1);
-
-            throw new ChangeCategoryException(
-                "The category #{$id} was not found: {$caller}",
-                static::ERR_NOT_FOUND,
-            );
-
-        }
-
-        return $category;
     }
 
     /**
