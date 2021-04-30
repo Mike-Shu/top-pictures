@@ -7,10 +7,6 @@
      @close.stop="open = false"
      @keydown.escape="open = false">
 
-    <input type="hidden"
-           name="_image_id"
-           value="{{ $image->id }}">
-
     {{-- Кнопка (при клике проверяем её на "disabled") --}}
     <div @click="if (!$el.closest('.change-category').querySelector('.change-category-button').disabled) open = !open">
         <x-gallery.list-item-button :title="__('Change category')" class="change-category-button">

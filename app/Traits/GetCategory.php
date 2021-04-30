@@ -5,7 +5,6 @@ namespace App\Traits;
 use App\Exceptions\NotFoundException;
 use App\Models\Category;
 use App\Services\CommonTools;
-use App\Services\Errors;
 use Cache;
 
 trait GetCategory

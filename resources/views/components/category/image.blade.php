@@ -6,6 +6,10 @@
             <x-category.image-control.image-control :image="$image"/>
         @endauth
 
+        <input type="hidden"
+               name="_image_id"
+               value="{{ $image->id }}">
+
         <a href="{{ route('download', [$image->name]) }}"
            target="_blank"
            title="{{ __('Click to download') }}">
