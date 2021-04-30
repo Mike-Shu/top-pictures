@@ -14,6 +14,7 @@ const mix = require('laravel-mix');
 mix.js('resources/js/app.js', 'public/js').
     js('resources/js/file-uploader/upload.js', 'public/js').
     js('resources/js/image/change-category.js', 'public/js').
+    js('resources/js/image/change-main-color.js', 'public/js').
     postCss('resources/css/app.css', 'public/css', [
         require('postcss-import'),
         require('tailwindcss'),

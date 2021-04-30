@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Web;
 
 use App\Http\Controllers\Controller;
 use App\Services\Image\ChangeCategoryService;
+use App\Services\Image\ChangeMainColorService;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\JsonResponse;
 
@@ -45,6 +46,18 @@ class ImageController extends Controller
     public function changeCategory(ChangeCategoryService $service): JsonResponse
     {
         return $service->changeCategory();
+    }
+
+    /**
+     * Изменить основной цвет для изображения.
+     *
+     * @param  ChangeMainColorService  $service
+     *
+     * @return JsonResponse
+     */
+    public function changeMainColor(ChangeMainColorService $service): JsonResponse
+    {
+        return $service->changeMainColor();
     }
 
 }

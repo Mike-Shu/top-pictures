@@ -30,6 +30,9 @@ Route::middleware(['auth'])->group(function () {
         Route::post('change-category', [ImageController::class, 'changeCategory'])
             ->name('image-change-category');
 
+        Route::post('change-main-color', [ImageController::class, 'changeMainColor'])
+            ->name('image-change-main-color');
+
     });
 
 });

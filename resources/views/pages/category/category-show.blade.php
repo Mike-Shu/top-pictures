@@ -74,8 +74,13 @@
                name="_change_category_url"
                value="{{ route('image-change-category') }}">
 
+        <input type="hidden"
+               name="_change_main_color_url"
+               value="{{ route('image-change-main-color') }}">
+
         @push('scripts')
             <script src="{{ asset('js/change-category.js') }}"></script>
+            <script src="{{ asset('js/change-main-color.js') }}"></script>
         @endpush
         {{-- /Изменить категорию --}}
     @endauth

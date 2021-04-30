@@ -35,10 +35,7 @@ trait GetImage
 
             $caller = CommonTools::getCaller($callerDepth);
 
-            throw new NotFoundException(
-                "The image #{$id} was not found: {$caller}",
-                Errors::NOT_FOUND,
-            );
+            throw new NotFoundException("The image #{$id} was not found: {$caller}");
 
         }
 

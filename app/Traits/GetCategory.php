@@ -32,10 +32,7 @@ trait GetCategory
 
             $caller = CommonTools::getCaller($callerDepth);
 
-            throw new NotFoundException(
-                "The category #{$id} was not found: {$caller}",
-                Errors::NOT_FOUND,
-            );
+            throw new NotFoundException("The category #{$id} was not found: {$caller}");
 
         }
 
