@@ -106,36 +106,22 @@ module.exports = class CategoryChanger {
      * Клик по категории (из списка выбрана категория, на которую нужно выполнить замену).
      *
      * @param {Event} e
-     * @param {Element} $categoryElement
+     * @param {Element} $category
      * @private
      */
-    _selectCategory(e, $categoryElement) {
+    _selectCategory(e, $category) {
 
         e.preventDefault();
 
         const self = this;
 
         // Основной элемент с изображением.
-        const $image = $categoryElement.closest('.category-image');
-
-        const imageId = DomTree.getValueBySelector(
-            'input[name=_image_id]',
-            'an error occurred while retrieving the list URL value',
-            $image,
-        );
-
-        const categoryId = DomTree.getValueBySelector(
-            'input[name=_category_id]',
-            'an error occurred while retrieving the list URL value',
-            $categoryElement,
-        );
-
+        const $image = $category.closest('.category-image');
         // Кнопка "Сменить категорию".
-        const $button = DomTree.getObjectBySelector(
-            '.change-category-button',
-            'an error occurred while retrieving the button object',
-            $image,
-        );
+        const $button = self._getButton($image);
+
+        const imageId = self._getImageId($image);
+        const categoryId = self._getCategoryId($category);
 
         // Переключим кнопку в режим "не доступна".
         self._buttonEnabled($button, false);
@@ -152,8 +138,8 @@ module.exports = class CategoryChanger {
     /**
      * Сменить категорию! Выполняет запрос на сервер.
      *
-     * @param {number}   imageId     Какое изображение?
-     * @param {number}   categoryId  В какую категорию отправить?
+     * @param {string}   imageId     Какое изображение?
+     * @param {string}   categoryId  В какую категорию отправить?
      * @param {function} callback
      * @private
      */
@@ -238,9 +224,60 @@ module.exports = class CategoryChanger {
     }
 
     /**
+     * Возвращает ID изображения, для которого нужно изменить категорию.
+     *
+     * @param {Element} $image
+     * @return {string}
+     * @private
+     */
+    _getImageId($image) {
+
+        return DomTree.getValueBySelector(
+            'input[name=_image_id]',
+            'an error occurred while retrieving the list URL value',
+            $image,
+        );
+
+    }
+
+    /**
+     * Возвращает ID категории, в которую должно быть перемещено изображение.
+     *
+     * @param {Element} $categoryElement
+     * @return {string}
+     * @private
+     */
+    _getCategoryId($categoryElement) {
+
+        return DomTree.getValueBySelector(
+            'input[name=_category_id]',
+            'an error occurred while retrieving the list URL value',
+            $categoryElement,
+        );
+
+    }
+
+    /**
+     * Возвращает DOM-элемент с текущей кнопкой "Сменить категорию".
+     *
+     * @param {Element} $image
+     * @return {Element}
+     * @private
+     */
+    _getButton($image) {
+
+        return DomTree.getObjectBySelector(
+            '.change-category-button',
+            'an error occurred while retrieving the button object',
+            $image,
+        );
+
+    }
+
+    /**
      * Переключает статус кнопки "Сменить категорию": доступна/не доступна.
      *
-     * @param {HTMLObjectElement} $button
+     * @param {Element} $button
      * @param {boolean} enabled
      * @private
      */
