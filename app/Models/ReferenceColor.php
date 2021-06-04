@@ -24,7 +24,7 @@ class ReferenceColor extends Model
      * @return bool
      * @throws Exception
      */
-    public function update(array $attributes = [], array $options = []): bool
+    final public function update(array $attributes = [], array $options = []): bool
     {
         throw new Exception(
             'Reference color updates are not allowed',
@@ -38,7 +38,7 @@ class ReferenceColor extends Model
      * @return bool
      * @throws Exception
      */
-    public function save(array $options = []): bool
+    final public function save(array $options = []): bool
     {
         throw new Exception(
             'Reference color updates are not allowed',
@@ -50,7 +50,7 @@ class ReferenceColor extends Model
      * @return bool|null
      * @throws Exception
      */
-    public function delete(): ?bool
+    final public function delete(): ?bool
     {
         throw new Exception(
             'Removal of the reference color is not allowed',

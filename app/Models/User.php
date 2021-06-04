@@ -33,7 +33,7 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    public function images(): HasMany {
+    final public function images(): HasMany {
 
         return $this->hasMany(Image::class);
 

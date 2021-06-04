@@ -32,7 +32,7 @@ class Category extends Model
     /**
      * @return HasMany
      */
-    public function images(): HasMany
+    final public function images(): HasMany
     {
         return $this->hasMany(Image::class);
     }

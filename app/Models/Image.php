@@ -37,7 +37,7 @@ class Image extends Model
     /**
      * @return BelongsTo
      */
-    public function category(): BelongsTo
+    final public function category(): BelongsTo
     {
         return $this->belongsTo(Category::class);
     }
@@ -45,7 +45,7 @@ class Image extends Model
     /**
      * @return BelongsTo
      */
-    public function user(): BelongsTo
+    final public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }
@@ -59,7 +59,7 @@ class Image extends Model
      *
      * @return bool
      */
-    public function scopeNotUnique(Builder $query, string $fileName): bool
+    final public function scopeNotUnique(Builder $query, string $fileName): bool
     {
         return $query->where('name', $fileName)->exists();
     }
