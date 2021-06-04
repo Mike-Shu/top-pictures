@@ -21,6 +21,7 @@
         "ksubileau/color-thief-php": "^1.4",
         "laravel/framework": "^8.12",
         "laravel/tinker": "^2.5",
+        "mll-lab/laravel-graphql-playground": "^2.5",
         "nuwave/lighthouse": "^5.12",
         "pion/laravel-chunk-upload": "^1.4",
         "predis/predis": "^1.1",

@@ -1,0 +1,51 @@
+"A date string with format `Y-m-d`, e.g. `2011-05-23`."
+scalar Date @scalar(class: "Nuwave\\Lighthouse\\Schema\\Types\\Scalars\\Date")
+
+"A datetime string with format `Y-m-d H:i:s`, e.g. `2018-05-23 13:43:32`."
+scalar DateTime @scalar(class: "Nuwave\\Lighthouse\\Schema\\Types\\Scalars\\DateTime")
+
+type Query {
+
+#    users: [User!]! @paginate(defaultCount: 10)
+    user(id: ID @eq): User @find
+
+    categories: [Category!]! @paginate(defaultCount: 10)
+    category(id: ID @eq): Category @find
+
+#    images: [Image!]! @paginate(defaultCount: 10)
+    image(id: ID @eq): Image @find
+
+}
+
+type User {
+    id: ID!
+    name: String!
+    email: String!
+    created_at: DateTime!
+    updated_at: DateTime!
+}
+
+type Category {
+    id: ID!
+    name: String!
+    images: [Image!]! @hasMany(type: "paginator")
+    description: String
+    created_at: DateTime!
+    updated_at: DateTime!
+}
+
+type Image {
+    id: ID!
+    category_id: Int
+    category: Category @belongsTo
+    user_id: Int!
+    user: User!
+    name: String!
+    extension: String!
+    size: Int!
+    description: String
+    width: Int!
+    height: Int!
+    created_at: DateTime!
+    updated_at: DateTime!
+}
